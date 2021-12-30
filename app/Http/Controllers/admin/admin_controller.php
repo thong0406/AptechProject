@@ -1,0 +1,206 @@
+<?php
+
+namespace App\Http\Controllers\admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Users;
+use App\Models\Books;
+use App\Models\Orders;
+use App\Models\Tags;
+use App\Models\Book_tags;
+use App\Models\Comments;
+use App\Models\Order_details;
+use App\Models\Bookstores;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
+class admin_controller extends Controller
+{
+    public function admin(){
+        return view('admin.demo.test');
+    }
+
+    	// Users
+    public function admin_user_lists(){
+    	$users = Users::all();
+        return view('admin.demo.user_lists' , compact('users'));
+    }
+    public function admin_user_add(){
+        return view('admin.demo.user_add');
+    }
+
+    public function admin_user_store(Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+            'username'=> 'required',
+            'phone' => 'required',
+            'email' => 'required|unique:users|email',
+            'address' => 'required',
+            'password' => 'required|min:6|max:32',
+            'confirm' => 'same:password',
+        ] , 
+        [
+            'required' => 'Please fill in your :attribute.'
+        ]);     
+
+        Users::create([
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+            'name' => $request->name,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'email' => $request->email //Hash::make($request->password)
+        ]);
+
+        return redirect()->route('admin_user_lists')->with('success', 'Created successfully');
+    }
+    public function admin_user_delete ($id){
+    	Users::find($id)->delete();
+        return redirect()->route('admin_bookstore_lists')->with('success', 'Created successfully');
+    }
+
+
+
+
+
+    	// Bookstores
+    public function admin_bookstore_lists(){
+    	$bookstores = Bookstores::all();
+        return view('admin.demo.bookstore_lists' , compact('bookstores'));
+    }
+    public function admin_bookstore_add(){
+        return view('admin.demo.bookstore_add');
+    }
+
+    public function admin_bookstore_store(Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+            'description'=> 'required'
+        ] , 
+        [
+            'required' => 'Please fill in your :attribute.'
+        ]);     
+
+        Bookstores::create([
+            'bookstore_name' => $request->name,
+            'information' => $request->description
+        ]);
+
+        return redirect()->route('admin_bookstore_lists')->with('success', 'Created successfully');
+    }
+    public function admin_bookstore_delete ($id){
+    	Bookstores::find($id)->delete();
+        return redirect()->route('admin_bookstore_lists')->with('success', 'Created successfully');
+    }
+
+
+
+
+
+    	// Books
+    public function admin_book_lists(){
+    	$books = Books::all();
+    	foreach ($books as $key => $value) {
+    		$bookstores = Bookstores::where("id" , "=" , $value['bookstore_id'])->get();
+    		$value['bookstore_name'] = $bookstores[0]['bookstore_name'];
+    	}
+        $book_tags = [];
+        foreach ($books as $key => $value) {
+            $arr = Book_tags::where('book_id' , '=' , $value['id'])->get();
+            foreach ($arr as $key => $tag) {
+                $tag_arr = Tags::where('id' , '=' , $tag['tag_id'])->get();
+                $book_tags[$value['id']][] = [
+                    'id'=>$tag['id'] , 
+                    'tag_name'=>$tag_arr[0]['tag_name']
+                ];
+            }
+        }
+
+        return view('admin.demo.book_lists' , compact('books' , 'book_tags'));
+    }
+    public function admin_book_add(){
+    	$bookstores = Bookstores::all();
+        $tags = Tags::all();
+        return view('admin.demo.book_add' , compact("bookstores" , "tags"));
+    }
+
+    public function admin_book_store(Request $request){
+        $this->validate($request, [
+			'book_name'=>"required" ,
+			'author'=>"required" ,
+			'image'=>"required" ,
+			'quantity'=>"required" ,
+			'description'=>"required" ,
+			'price'=>"required" ,
+			'bookstore_id'=>"required|min:0" ,
+            'tag_id'=>"required"
+        ] , 
+        [
+            'required' => 'Please fill in your :attribute.' ,
+            'min' => 'Please pick the :attribute.'
+        ]);     
+
+        $books = Books::create([
+			'book_name'=>$request->book_name,
+			'author'=>$request->author,
+			'image'=>$request->image,
+			'quantity'=>$request->quantity,
+			'description'=>$request->description,
+			'price'=>$request->price,
+			'bookstore_id'=>$request->bookstore_id
+        ]);
+
+        foreach ($request->tag_id as $value) {
+            if ($value != -1) {
+                Book_tags::create([
+                    "book_id"=>$books->id ,
+                    'tag_id'=>$value
+                ]);
+            }
+        }
+
+        return redirect()->route('admin_book_lists')->with('success', 'Created successfully');
+    }
+    public function admin_book_delete ($id){
+    	Books::find($id)->delete();
+        return redirect()->route('admin_book_lists')->with('success', 'Created successfully');
+    }
+    public function admin_book_comments ($id){
+        $comments = Comments::where('book_id' , '=' , $id)->get();
+        $books = Books::find($id);
+        return view('admin.');
+    }
+
+
+
+
+
+        // Tags
+    public function admin_tag_lists(){
+        $tags = Tags::all();
+        return view('admin.demo.tag_lists' , compact('tags'));
+    }
+    public function admin_tag_add(){
+        return view('admin.demo.tag_add');
+    }
+
+    public function admin_tag_store(Request $request){
+        $this->validate($request, [
+            'tag_name' => 'required'
+        ] , 
+        [
+            'required' => 'Please fill in your :attribute.'
+        ]);     
+
+        Tags::create([
+            'tag_name' => $request->tag_name,
+            'information' => $request->description
+        ]);
+
+        return redirect()->route('admin_tag_lists')->with('success', 'Created successfully');
+    }
+    public function admin_tag_delete ($id){
+        Tags::find($id)->delete();
+        return redirect()->route('admin_tag_lists')->with('success', 'Created successfully');
+    }
+}
