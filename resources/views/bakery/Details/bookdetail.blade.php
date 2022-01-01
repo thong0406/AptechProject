@@ -16,7 +16,7 @@
                     </div>
                     <div class="col-md-6 infor">
                         <h1>{{ $value['book_name'] }}</h1>
-                        <p>{{ $value['bookstore_name'] }}</p>
+                        <p style="font-family:Times New Roman;">{{ $value['bookstore_name'] }}</p>
                         <br>
                         <p>
                             @for ($i=0 ; $i < $value['stars'] ; $i++)
@@ -27,7 +27,7 @@
                             @endfor
                         </p>
                         <br>
-                        <p>{{ $value['description'] }}</p>
+                        <p style="font-family:Times New Roman;">{{ $value['description'] }}</p>
                         <br><br>
                         <div class="row">
                             <div class="col-md-12 col-sm-6">
@@ -36,7 +36,7 @@
                                     <div class="card-body" style="padding:35px;">
                                         <form method="POST" action="{{ route('add_cart' , $value['id']) }}">
                                             @csrf
-                                            <section class="buy"><br><input type="number" name="quantity" min="1" max="{{ $value['quantity'] }}" value="1" style="width: 75%;"></section>
+                                            <section class="buy" ><br><input type="number" name="quantity" min="1" max="{{ $value['quantity'] }}" value="1" style="width: 75%;"></section>
                                             <button type="submit" class="btn btn-primary" style="margin-left:80px;height:40px;margin-top:-45px;">Add To  Cart</button>
                                         </form>
                                     </div>
@@ -47,7 +47,7 @@
                             <br><br>
                             <p>
                                 Tags:
-                                <ul>
+                                <ul style="font-family:Times New Roman;">
                                     @foreach ($book_tags as $key => $value)
                                         <li style="margin-left: 20px;">-{{ $value['tag_name'] }}</li>
                                     @endforeach
