@@ -5,7 +5,7 @@ use App\Http\Controllers\bakery\HomeController;
 use App\Http\Controllers\bakery\DetailsController;
 use App\Http\Controllers\cart\cart_controller;
 use App\Http\Controllers\account\LoginController;
-use App\Http\Controllers\controller_search;
+use App\Http\Controllers\search\search_controller;
 use App\Http\Controllers\admin\admin_controller;
 
 
@@ -29,6 +29,11 @@ Route::get('login' , [LoginController::class , 'signin'])->name('login');
 Route::get('signup' , [LoginController::class , 'signup'])->name('register');
 Route::post('create_user' , [LoginController::class , 'new_user'])->name('new_user');
 Route::post('check_login' , [LoginController::class , 'postLogin'])->name('check_login');
+
+Route::prefix('search')->group(function () {
+	Route::get('/{return?}' , [search_controller::class , 'search_view'])->name('search_view');
+	Route::post('store' , [search_controller::class , 'search_store'])->name('search_store');
+});
 
 Route::prefix('admin')->group(function () {
 	Route::prefix('users')->group(function () {
@@ -108,6 +113,6 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::get('signin', [HomeController::class, 'signin'])->name('login');
+Route::get('signin', [LoginController::class, 'signin'])->name('login');
 Route::get('signup', [LoginController::class, 'signup'])->name('register');
 Route::post('auth_user', [LoginController::class, 'auth_user'])->name('auth_user');
