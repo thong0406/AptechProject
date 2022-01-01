@@ -24,22 +24,13 @@
 							<option value="{{ $value['id'] }}">{{ $value['bookstore_name'] }}</option>
 						@endforeach
 					</select><br>
-					<div class="form-group">
-						<label>
-							Tags :
-							<a href="#/" onclick="add_tag()"><i class="fas fa-plus"></i></a>
-						</label>
-						<h6 id="total">1/5</h6>
-						<select class="form-select" name="tags[1]" aria-label="Default select example">
-							<option value="-1" selected></option>
-							@foreach ($tags as $key => $value)
-								<option value=" {{ $value['id'] }} ">{{ $value['tag_name'] }}</option>
-							@endforeach
-						</select>
-						<div id="extra_tags">
-							
-						</div>
-					</div>
+					Tags :
+					<select name="tags" aria-label="Default select example">
+						<option value="-1" selected></option>
+						@foreach ($tags as $key => $value)
+							<option value="{{ $value['id'] }}">{{ $value['tag_name'] }}</option>
+						@endforeach
+					</select><br>
 				</form>
 			</div>
 			<div class="col-md-9 col-lg-9 col-xl-9 col-sm-12">
@@ -85,16 +76,5 @@
 
 @push ('scripts')
     <script type="text/javascript">
-        var tags = document.getElementById('extra_tags');
-        var total = document.getElementById('total');
-        var cur_tag = 1;
-
-        function add_tag () {
-            if (cur_tag < 5) {
-                cur_tag += 1;
-                tags.innerHTML += "<br><select class='form-select' name='tags[" + parseInt(cur_tag) + "]' aria-label='Default select example'><option value='-1' selected></option>@foreach ($tags as $key => $value)<option value=' {{ $value['id'] }} '>{{ $value['tag_name'] }}</option>@endforeach</select><br>";
-                total.innerHTML = parseInt(cur_tag) + "/5";
-            }
-        }
     </script>
 @endpush
