@@ -18,16 +18,12 @@ class DetailsController extends Controller
 {
     public function details(Request $request, $id){
         $books = Books::where('id' , '=' , $id)->get();
-    	foreach ($books as $key => $value) {
-    		$bookstores = Bookstores::where("id" , "=" , $value['bookstore_id'])->get();
-    		$value['bookstore_name'] = $bookstores[0]['bookstore_name'];
-    	}
 
         $stars = 5;
         $book_tags = [];
         foreach ($books as $key => $value) {
         	$bookstores = Bookstores::where("id" , "=" , $value['bookstore_id'])->get();
-    		$value['bookstore_name'] = $bookstores[0]['bookstore_name'];
+    		$books[$key]['bookstore_name'] = $bookstores[0]['bookstore_name'];
             $arr = Book_tags::where('book_id' , '=' , $value['id'])->get();
             foreach ($arr as $key => $tag) {
                 $tag_arr = Tags::where('id' , '=' , $tag['tag_id'])->get();
@@ -52,6 +48,7 @@ class DetailsController extends Controller
         	foreach ($users as $user_key => $user) {
         		$comments[] = [
         			'name' => $user['name'] ,
+                    'username' => $user['username'] ,
         			'image' => $user['image'] ,
         			'comment' => $value['comment'] ,
         			'stars' => $value['rating'] ,
@@ -121,5 +118,32 @@ class DetailsController extends Controller
         $request->session()->put('cart' , $arr);
 
         return redirect()->route('cart')->with('success' , 'Added successfully');
+    }
+
+    public function order_now (Request $request , $id) {
+        $this->validate($request , [
+            'name'=>'required' ,
+            'phonenumber'=>'required' ,
+            'email'=>'required' ,
+            'address'=>'required' ,
+            'amount'=>'required'
+        ]);
+        $books = Books::where('id' , '=' , $id)->get();
+        Orders::create([
+            'user_id'=>'1' ,
+            'cus_name'=>$request->name ,
+            'address'=>$request->address ,
+            'phone'=>$request->phonenumber ,
+            'email'=>$request->email ,
+            'payment'=> $request->amount * $books[0]['price'] ,  
+            'status'=>'0'
+        ]);
+        Order_details::create([
+            'order_id'=>Orders::max('id') ,
+            'book_id'=>$books[0]['id'] ,
+            'quantity'=>$request->amount ,
+            'price'=>$books[0]['price'] * $request->amount
+        ]);
+        return redirect()->route('book_details' , $id)->with('success' , 'Bought successfully');
     }
 }
