@@ -21,6 +21,7 @@ Route::prefix('cart')->group(function () {
 });
 Route::get('details/{id}', [DetailsController::class, 'details'])->name('book_details');
 Route::post('add_cart/{id}', [DetailsController::class, 'add_cart'])->name('add_cart');
+Route::post('order_now/{id}', [DetailsController::class, 'order_now'])->name('order_now');
 
 Route::get('/',[HomeController::class,'home']);
 Route::get('admin_dashboard',[HomeController::class , 'admin']);
