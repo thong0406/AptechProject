@@ -8,30 +8,24 @@ use App\Http\Controllers\account\LoginController;
 use App\Http\Controllers\search\search_controller;
 use App\Http\Controllers\admin\admin_controller;
 
-
-Route::get('/', function () {
-    return view('welcome'); 
-});
-
 Route::prefix('cart')->group(function () {
 	Route::get('/',[cart_controller::class,'cart'])->name('cart');
 	Route::post('/update/{id}',[cart_controller::class,'cart_update'])->name('cart_update');
 	Route::get('/delete/{id}',[cart_controller::class,'cart_delete'])->name('cart_delete');
+	Route::get('/delete_all',[cart_controller::class,'cart_delete_all'])->name('cart_delete_all');
 	Route::post('/order',[cart_controller::class,'cart_order'])->name('cart_order');
 });
 Route::get('details/{id}', [DetailsController::class, 'details'])->name('book_details');
 Route::post('add_cart/{id}', [DetailsController::class, 'add_cart'])->name('add_cart');
 Route::post('order_now/{id}', [DetailsController::class, 'order_now'])->name('order_now');
 
-Route::get('/',[HomeController::class,'home']);
-Route::get('admin_dashboard',[HomeController::class , 'admin']);
-
 Route::get('login' , [LoginController::class , 'signin'])->name('login');
 Route::get('signup' , [LoginController::class , 'signup'])->name('register');
 Route::post('create_user' , [LoginController::class , 'new_user'])->name('new_user');
 Route::post('check_login' , [LoginController::class , 'postLogin'])->name('check_login');
 
-Route::prefix('search')->group(function () {
+Route::get('{return?}' , [search_controller::class , 'search_view'])->name('home');
+Route::prefix('home')->group(function () {
 	Route::get('/{return?}' , [search_controller::class , 'search_view'])->name('search_view');
 	Route::post('store' , [search_controller::class , 'search_store'])->name('search_store');
 });
