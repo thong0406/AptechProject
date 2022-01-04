@@ -30,7 +30,7 @@
                         <form method="POST" action="{{ route('search_store') }}">
                             @csrf
                             <div style="display: inline-flex; border-radius: 40px; background-color: none   ; padding: 2px; border: 1px solid lightgray;">
-                                <input type="text" name="search" style="color: white; outline: none; border: none; background-color: transparent; padding: 10px; height: 40px;" value="{{ $param['search'] }}">
+                                <input type="text" name="search" style="color: white; outline: none; border: none; background-color: transparent; padding: 10px; height: 40px;" value="">
                                 <button class="btn btn-warning" style="border-radius: 40px; height: 40px;">Search</button>
                             </div>
                             <input type="hidden" name="type" value="book_name">
