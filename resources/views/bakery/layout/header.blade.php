@@ -18,7 +18,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7 col-sm-7 col-xs-7">
+                    <div class="col-md-4 col-sm-4 col-xs-4">
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav d-flex" style="flex-direction: row; float: right;">
                                 <li class="nav-item mx-3"><a href='{{ route('home') }}' class="nav-link text-uppercase font-weight-bold js-scroll-trigger">HOME</a></li>
@@ -26,16 +26,18 @@
                             </ul>
                         </div>
                     </div>
-                    <!--
                     <div class="col-md-3 col-sm-3 col-xs-3">
-                        <form method="POST" action="">
-                        <div style="display: inline-flex; border-radius: 40px; background-color: none   ; padding: 2px; border: 1px solid lightgray;">
-                            <input type="text" name="search" style="outline: none; border: none; background-color: transparent; padding: 10px; height: 40px;">
-                            <button class="btn btn-warning" style="border-radius: 40px; height: 40px;">Search</button>
-                        </div>
+                        <form method="POST" action="{{ route('search_store') }}">
+                            @csrf
+                            <div style="display: inline-flex; border-radius: 40px; background-color: none   ; padding: 2px; border: 1px solid lightgray;">
+                                <input type="text" name="search" style="color: white; outline: none; border: none; background-color: transparent; padding: 10px; height: 40px;" value="{{ $param['search'] }}">
+                                <button class="btn btn-warning" style="border-radius: 40px; height: 40px;">Search</button>
+                            </div>
+                            <input type="hidden" name="type" value="book_name">
+                            <input type="hidden" name="bookstore" value="-1">
+                            <input type="hidden" name="tags" value="">
                         </form>
                     </div>
-                            -->
                 </div>
             </div>
         </nav>
