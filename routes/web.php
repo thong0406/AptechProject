@@ -20,9 +20,9 @@ Route::post('add_cart/{id}', [DetailsController::class, 'add_cart'])->name('add_
 Route::post('order_now/{id}', [DetailsController::class, 'order_now'])->name('order_now');
 
 Route::get('login' , [LoginController::class , 'signin'])->name('login');
-Route::get('signup' , [LoginController::class , 'signup'])->name('register');
-Route::post('create_user' , [LoginController::class , 'new_user'])->name('new_user');
-Route::post('check_login' , [LoginController::class , 'postLogin'])->name('check_login');
+Route::get('signup' , [LoginController::class , 'signup'])->name('signup');
+Route::post('create_user' , [LoginController::class , 'create_user'])->name('create_user');
+Route::post('auth_user', [LoginController::class, 'auth_user'])->name('auth_user');
 
 Route::get('{return?}' , [search_controller::class , 'search_view'])->name('home');
 Route::prefix('home')->group(function () {
@@ -106,8 +106,3 @@ Route::prefix('admin')->group(function () {
 
 	});
 });
-
-Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::get('signin', [LoginController::class, 'signin'])->name('login');
-Route::get('signup', [LoginController::class, 'signup'])->name('register');
-Route::post('auth_user', [LoginController::class, 'auth_user'])->name('auth_user');
