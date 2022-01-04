@@ -36,25 +36,11 @@ class search_controller extends Controller
 		}
 
 		if (($param['bookstore'] != '-1') and ($param['bookstore'] != '')) $condition[] = [ 'bookstore_id' , '=' , $param['bookstore'] ];
-		if (($param['tags'] != '-1') and ($param['tags'] != '')) {
-			
-		}
 
-		$tags_not_empty = 0;
-		if ($param['tags'] != '') {
-			foreach ($param['tags'] as $value) {
-				if ($value != -1) {
-					$tags_not_empty = 1;
-					break;
-				}
-			}
-		}
 		$condition_or = [];
-		if ($tags_not_empty == 1) {
+		if ($param['tags'] != '') {
 			$book_tags = DB::table('book_tags');
-			foreach ($param['tags'] as $value) {
-				$book_tags->orWhere('tag_id' , '=' , $value);
-			}
+			$book_tags->orWhere('tag_id' , '=' , $param['tags']);
 			foreach ($book_tags->get() as $key => $value) {
 				$condition_or[] = ['id' , '=' , $value->book_id];
 			}
