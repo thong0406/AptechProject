@@ -19,7 +19,7 @@ Route::get('details/{id}', [DetailsController::class, 'details'])->name('book_de
 Route::post('add_cart/{id}', [DetailsController::class, 'add_cart'])->name('add_cart');
 Route::post('order_now/{id}', [DetailsController::class, 'order_now'])->name('order_now');
 
-Route::get('login' , [LoginController::class , 'signin'])->name('login');
+Route::get('signin' , [LoginController::class , 'signin'])->name('login');
 Route::get('signup' , [LoginController::class , 'signup'])->name('signup');
 Route::post('create_user' , [LoginController::class , 'create_user'])->name('create_user');
 Route::post('auth_user', [LoginController::class, 'auth_user'])->name('auth_user');
