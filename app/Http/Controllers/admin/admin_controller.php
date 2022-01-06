@@ -12,6 +12,7 @@ use App\Models\Comments;
 use App\Models\Order_details;
 use App\Models\Bookstores;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
 class admin_controller extends Controller
@@ -123,47 +124,67 @@ class admin_controller extends Controller
         $tags = Tags::all();
         return view('admin.demo.book_add' , compact("bookstores" , "tags"));
     }
-
     public function admin_book_store(Request $request){
-        $this->validate($request, [
-			'book_name'=>"required" ,
-			'author'=>"required" ,
-			'image'=>"required" ,
-			'quantity'=>"required" ,
-			'description'=>"required" ,
-			'price'=>"required" ,
-			'bookstore_id'=>"required|min:0" ,
-            'tag_id'=>"required"
-        ] , 
-        [
-            'required' => 'Please fill in your :attribute.' ,
-            'min' => 'Please pick the :attribute.'
-        ]);     
-
+        $this->validate($request , [
+                'book_name' => "required",
+                'author' => "required",
+                'image' => "required",
+                'quantity' => "required",
+                'description' => "required",
+                'price' => "required",
+                'bookstore_id' => "required|min:0",
+                'tag_id' => "required"
+            ],
+            [
+                'required' => 'Please fill in your :attribute.',
+                'min' => 'Please pick the :attribute.'
+            ]
+        );
+        $image = $request->file('image');
+        $extension = $image->getClientOriginalExtension();
+        $name = time() . "." . $extension;
+        $store = $image->move('img', $name);
+        $SQLstore = 'img/' . $name;
         $books = Books::create([
-			'book_name'=>$request->book_name,
-			'author'=>$request->author,
-			'image'=>$request->image,
-			'quantity'=>$request->quantity,
-			'description'=>$request->description,
-			'price'=>$request->price,
-			'bookstore_id'=>$request->bookstore_id
+            'book_name' => $request->book_name,
+            'author' => $request->author,
+            'image' => $SQLstore,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'price' => $request->price,
+            'bookstore_id' => $request->bookstore_id
         ]);
 
         foreach ($request->tag_id as $value) {
             if ($value != -1) {
                 Book_tags::create([
-                    "book_id"=>$books->id ,
-                    'tag_id'=>$value
+                    "book_id" => $books->id,
+                    'tag_id' => $value
                 ]);
             }
         }
 
         return redirect()->route('admin_book_lists')->with('success', 'Created successfully');
     }
+    public function admin_book_edit(Request $request , $id) {
+        $book = Books::where('id' , '=' , $id)->get();
+        $bookstore = Bookstores::where('id' , '=' , $book[0]['bookstore_id'])->get();
+        $book[0]['bookstore_name'] = $bookstore[0]['name'];
+        $bookstores = Bookstores::all();
+        $tags = Tags::all();
+        return view('admin.demo.book_edit' , compact('book' , 'bookstores' , 'tags'));
+    }
+    public function admin_book_update(Request $request , $id) {
+        $book = Books::where('id' , '=' , $id)->get();
+        $bookstore = Bookstores::where('id' , '=' , $book[0]['bookstore_id'])->get();
+        $book[0]['bookstore_name'] = $bookstore[0]['name'];
+        $bookstores = Bookstores::all();
+        $tags = Tags::all();
+        return view('admin.demo.book_edit' , compact('book' , 'bookstores' , 'tags'));
+    }
     public function admin_book_delete ($id){
     	Books::find($id)->delete();
-        return redirect()->route('admin_book_lists')->with('success', 'Created successfully');
+        return redirect()->route('admin_book_lists')->with('success', 'Deleted successfully');
     }
     public function admin_book_comments ($id){
         $comments = Comments::where('book_id' , '=' , $id)->get();
