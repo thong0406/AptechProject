@@ -43,12 +43,12 @@
                             </tfoot>
                             <tbody>
                                 @foreach ($books as $value)
-									<tr >
+									<trs>
 										<th scope="row">{{$value['id']}}</th>
-                                        <td><img src="{{ asset($value['image']) }}" width="100"></td>
+                                        <td><a href="{{ route('book_details' , $value['id']) }}"><img src="{{ asset($value['image']) }}" width="100"></a></td>
                                         <td>{{$value['book_name']}}</td>
 										<td>{{$value['bookstore_name']}}</td>
-                                        <td class="add">
+                                        <td>
                                             <ul>
                                                 @foreach ($book_tags[$value['id']] as $key => $tags)
                                                     <li>{{ $tags['tag_name'] }}</li>
@@ -58,11 +58,11 @@
                                         <td>{{$value['price']}}</td>
                                         <td>{{$value['quantity']}}</td>
 										<td>{{$value['created_at']->toDateString() }}</td>
-										<td class="add">
-                                            <ul style="list-style:none;">
-                                                <li ><button class="btn btn-success"><a href="{{ /*Route('admin_user_edit', $value->id ))*/ "a" }}"><i class="fas fa-user-edit"></i></a></button></li>
-								                <li><button class="btn btn-danger"><a href="{{ Route('admin_book_delete', $value['id'] ) }}"><i class="fas fa-user-times"></i></a></button></li>
-                                                <li><button class="btn btn-primary"><a href="{{ Route('admin_book_delete', $value['id'] ) }}"><i class="fas fa-comment"></i></a></button></li>
+										<td>
+                                            <ul>
+                                                <li><a href="{{ Route('admin_book_edit', $value['id']) }}">Edit</a></li>
+								                <li><a href="{{ Route('admin_book_delete', $value['id']) }}">Delete</a></li>
+                                                <li><a href="{{ Route('admin_book_delete', $value['id']) }}">Comment</a></li>
                                             </ul>
                                         </td>
 									</tr>
