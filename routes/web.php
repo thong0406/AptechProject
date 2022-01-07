@@ -8,7 +8,7 @@ use App\Http\Controllers\account\LoginController;
 use App\Http\Controllers\search\search_controller;
 use App\Http\Controllers\admin\admin_controller;
 
-Route::prefix('cart')->group(function () {
+Route::group(['prefix'=>'cart' , 'middleware'=>'check_user_account'] , function () {
 	Route::get('/',[cart_controller::class,'cart'])->name('cart');
 	Route::post('/update/{id}',[cart_controller::class,'cart_update'])->name('cart_update');
 	Route::get('/delete/{id}',[cart_controller::class,'cart_delete'])->name('cart_delete');
@@ -32,7 +32,7 @@ Route::prefix('home')->group(function () {
 	Route::post('store' , [search_controller::class , 'search_store'])->name('search_store');
 });
 
-Route::prefix('admin')->group(function () {
+Route::group(['prefix'=>'admin' /*, 'middleware'=>'check_admin_account'*/] , function () {
 	Route::prefix('users')->group(function () {
 
 		Route::get('/' , [ admin_controller::class , 'admin_user_lists' ])
