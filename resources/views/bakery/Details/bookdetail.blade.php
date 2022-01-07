@@ -51,8 +51,13 @@
                                         <option>{{ $i }}</option>
                                     @endfor
                                 </select>
-                                <button class="btn rounded-pill btn-warning mb-2" type="submit" style="width: 100%;">Add to cart</button>
-                                <button class="btn rounded-pill btn-warning" type="button" style="width: 100%;" data-toggle="modal" data-target="#buy_now">Buy now</button>
+                                @if (session('user_details')) 
+                                    <button class="btn rounded-pill btn-warning mb-2" type="submit" style="width: 100%;">Add to cart</button>
+                                    <button class="btn rounded-pill btn-warning" type="button" style="width: 100%;" data-toggle="modal" data-target="#buy_now">Buy now</button>
+                                @else
+                                    <a class="btn rounded-pill btn-warning mb-2" href="{{ route('login') }}" style="width: 100%;">Add to cart</a>
+                                    <a class="btn rounded-pill btn-warning" href="{{ route('login') }}" style="width: 100%;">Buy now</a>
+                                @endif
                             </div>
                         </form>
 
@@ -118,11 +123,11 @@
                             <img src="{{ asset($value['image']) }}" alt="" class="rounded-circle" width="40" height="40">
                             <h6>{{ $value['username'] }}</h6> <span>- {{ $value['date'] }}</span>
                             <span>
-                                @for ($i=0 ; $i < 5-$value['stars'] ; $i++)
-                                <span style="color: #FD4;">&#9733;</span>
-                                @endfor
                                 @for ($i=0 ; $i < $value['stars'] ; $i++)
-                                    <span style="color: #FD4;">&#9734;</span>
+                                    <span style="color: #FD4;">&#9733;</span>
+                                @endfor
+                                @for ($i=0 ; $i < 5-$value['stars'] ; $i++)
+                                <span style="color: #FD4;">&#9734;</span>
                                 @endfor
                             </span>
                             <p style="margin-top: 5px; font-size: 20px; color: black;">{{ $value['comment'] }}</p>
@@ -131,36 +136,64 @@
                 @endforeach
             </div>
             <div class="col-md-5">
-                <form id="algin-form" method="POST" action="">
-                    @csrf
-                    <div class="d-flex">
-                        <img src="{{ asset('img/pfp/default.jpg') }}" alt="" class="rounded-circle" width="40" height="40">
-                    </div>
-                    <div class="form-group">
-                        <h4>Leave a comment</h4>
-                        <div class="stars">
-                            <input class="star star-5" id="star-5-2" type="radio" name="star" value="1" />
-                            <label class="star star-5" for="star-5-2"></label>
-                            <input class="star star-4" id="star-4-2" type="radio" name="star" value="2"/>
-                            <label class="star star-4" for="star-4-2"></label>
-                            <input class="star star-3" id="star-3-2" type="radio" name="star" value="3"/>
-                            <label class="star star-3" for="star-3-2"></label>
-                            <input class="star star-2" id="star-2-2" type="radio" name="star" value="4"/>
-                            <label class="star star-2" for="star-2-2"></label>
-                            <input class="star star-1" id="star-1-2" type="radio" name="star" value="5"/>
-                            <label class="star star-1" for="star-1-2"></label>
-                        </div><br>
-                        <label for="message">Message</label>
-                        <textarea name="msg" id="" msg cols="30" rows="5" class="form-control" style=""></textarea>
-                    </div>
-                    <div class="form-group">
-                        <p class="text-secondary">
-                        </p>
-                    </div>
-                    <div class="form-group">
-                        <button type="button" id="post" class="btn btn-warning">Post Comment</button>
-                    </div>
-                </form>
+                @if (session('user_details'))
+                    <form id="algin-form" method="POST" action="{{ route('details_create_comment' , $books[0]['id']) }}">
+                        @csrf
+                        <div class="d-flex">
+                            <img src="{{ asset(session('user_details')->image) }}" alt="" class="rounded-circle" style="width: 40px; height: 40px;">
+                            <h3 class="mt-1 ml-2">{{ session('user_details')->username }}</h3>
+                        </div>
+                        <div class="form-group">
+                            <h4>Leave a comment</h4>
+                            <div class="stars">
+                                <input class="star star-5" id="star-5-2" type="radio" name="star" value="5" />
+                                <label class="star star-5" for="star-5-2"></label>
+                                <input class="star star-4" id="star-4-2" type="radio" name="star" value="4"/>
+                                <label class="star star-4" for="star-4-2"></label>
+                                <input class="star star-3" id="star-3-2" type="radio" name="star" value="3"/>
+                                <label class="star star-3" for="star-3-2"></label>
+                                <input class="star star-2" id="star-2-2" type="radio" name="star" value="2"/>
+                                <label class="star star-2" for="star-2-2"></label>
+                                <input class="star star-1" id="star-1-2" type="radio" name="star" value="1"/>
+                                <label class="star star-1" for="star-1-2"></label>
+                            </div><br>
+                            <label for="message">Message</label>
+                            <textarea name="comment" id="" msg cols="30" rows="5" class="form-control" style=""></textarea>
+                        </div>
+                        <div class="form-group">
+                            <p class="text-secondary">
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="post" class="btn btn-warning">Post Comment</button>
+                        </div>
+                    </form>
+                @else
+                    <form id="algin-form">
+                        @csrf
+                        <div class="form-group">
+                            <h4>Leave a comment</h4>
+                            <a href="{{ route('login') }}">Please login to leave a comment</a><br>
+                            <div class="stars">
+                                <input class="star star-5" id="star-5-2" type="radio" name="star" value="5" disabled/>
+                                <label class="star star-5" for="star-5-2"></label>
+                                <input class="star star-4" id="star-4-2" type="radio" name="star" value="4" disabled/>
+                                <label class="star star-4" for="star-4-2"></label>
+                                <input class="star star-3" id="star-3-2" type="radio" name="star" value="3" disabled/>
+                                <label class="star star-3" for="star-3-2"></label>
+                                <input class="star star-2" id="star-2-2" type="radio" name="star" value="2" disabled/>
+                                <label class="star star-2" for="star-2-2"></label>
+                                <input class="star star-1" id="star-1-2" type="radio" name="star" value="1" disabled/>
+                                <label class="star star-1" for="star-1-2"></label>
+                            </div><br>
+                            <label for="message">Message</label>
+                            <textarea name="comment" id="" msg cols="30" rows="5" class="form-control" style="" disabled></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="post" class="btn btn-warning" disabled>Post Comment</button>
+                        </div>
+                    </form>
+                @endif
             </div>
         </div>
     </div>
