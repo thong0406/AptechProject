@@ -18,7 +18,7 @@ class LoginController extends Controller
     {
         return view('loginform.view.signup');
     }
-    public function postLogin(Request $request)
+    public function auth_user (Request $request)
     {
         $this->validate($request, [
             'username' => 'required',
@@ -27,35 +27,44 @@ class LoginController extends Controller
         $credentials = $request->only('username', 'password');
         if (Auth::attempt($credentials)) {
                 // Đổi thành Route home nếu có
-            return redirect()->route('cart')->with('success','Signed in');
+            $request->session()->put('user_details' , Auth::user());
+            echo ('<pre>');
+            print_r($request->session()->get('user_details'));
+            echo ('</pre>');
+            return redirect()->route('home')->with('success','Signed in');
         }
     }
-    public function new_user (Request $request)
+    public function create_user (Request $request)
     {
-        $this->validate($request, [
+        $this->validate($request , [
             'name' => 'required',
             'username'=> 'required',
             'phone' => 'required',
             'email' => 'required|unique:users|email',
             'address' => 'required',
-            'password' => 'required|min:6|max:32',
-            'confirm' => 'same:password',
+            'pass' => 'required|min:6|max:32',
+            're-pass' => 'same:pass',
         ] , 
         [
-            'required' => 'Please fill in your :attribute.' ,
-            'same' => 'Password is re-enterd incorectly.'
+            'required' => 'Please fill in your :attribute.'
         ]);
 
         Users::create([
             'username' => $request->username,
-            'password' => bcrypt($request->password),
+            'password' => bcrypt($request->pass),
             'name' => $request->name,
             'address' => $request->address,
             'phone' => $request->phone,
-            'email' => $request->email //Hash::make($request->password)
+            'email' => $request->email
         ]);
 
-            // Đổi thành Route home nếu có
-        return redirect()->route('cart')->with('success', 'Created successfully');
+        if (Auth::attempt($credentials)) {
+            Auth::login($request);
+            return redirect()->route('home');
+        }
     }
+    public function logout (Request $request) {
+        Auth::logout();
+        return redirect()->route('home');
+    } 
 }
