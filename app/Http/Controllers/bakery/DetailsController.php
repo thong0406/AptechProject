@@ -146,4 +146,21 @@ class DetailsController extends Controller
         ]);
         return redirect()->route('book_details' , $id)->with('success' , 'Bought successfully');
     }
+
+    public function create_comment (Request $request , $id) {
+        $this->validate($request , [
+            'star'=>'required' ,
+            'comment'=>'required'
+        ]);
+
+        $user = $request->session()->get('user_details');
+
+        Comments::create([
+            'book_id' => $id,
+            'user_id' => $user->id ,
+            'comment' => $request->comment ,
+            'rating' => $request->star
+        ]);
+        return redirect()->route('book_details' , $id);
+    }
 }
