@@ -298,6 +298,13 @@ class admin_controller extends Controller
         return view('admin.demo.order_details' , compact('order' , 'order_details'));
     }
     public function admin_order_delete ($id){
+        $order_details = Order_details::where('order_id' , '=' , $id)->get();
+        foreach ($order_details as $key => $value) {
+            $book = Books::where('id' , '=' , $value['book_id'])->get();
+            Books::where('id' , '=' , $value['book_id'])->update([
+                'quantity'=>$book[0]['quantity'] + $value['quantity']
+            ]);
+        }
         Orders::where('id' , '=' , $id)->delete();
         return redirect()->route('admin_order_lists')->with('success', 'Order cancelled successfully');
     }
