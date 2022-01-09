@@ -13,31 +13,31 @@
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <form action="{{ route('admin_book_store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin_book_update' , $book[0]['id']) }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label>Book name</label>
-                            <input class="form-control" name="book_name" placeholder="Please enter book's name" />
+                            <input class="form-control" name="book_name" placeholder="Please enter book's name" value="{{ $book[0]['book_name'] }}" />
                         </div>
                         <div class="form-group">
                             <label>Author name</label>
-                            <input class="form-control" name="author" placeholder="Please enter book's name" />
+                            <input class="form-control" name="author" placeholder="Please enter book's name" value="{{ $book[0]['author'] }}" />
                         </div>
                         <div class="form-group">
                             <label>Image</label>
-                            <input class="form-control-file" type="file" name="image"/>
+                            <input class="form-control" name="image" placeholder="Please enter book's name" value="{{ $book[0]['image'] }}" />
                         </div>
                         <div class="form-group">
                             <label>Quantity</label>
-                            <input class="form-control" name="quantity" type="number" placeholder="Please enter book's name" />
+                            <input class="form-control" name="quantity" type="number" placeholder="Please enter book's name" value="{{ $book[0]['quantity'] }}" />
                         </div>
                         <div class="form-group">
                             <label>Price</label>
-                            <input class="form-control" name="price" type="number" placeholder="Please enter book's name" />
+                            <input class="form-control" name="price" type="number" placeholder="Please enter book's name" value="{{ $book[0]['price'] }}" />
                         </div>
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control" name="description" rows="3" placeholder="Please enter book description"></textarea>
+                            <textarea class="form-control" name="description" rows="3" placeholder="Please enter book description" value="{{ $book[0]['description'] }}"></textarea>
                         </div>
                         <div class="form-group">
                             <label>Bookstore</label>
@@ -64,7 +64,7 @@
                                 
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>
             </div>
