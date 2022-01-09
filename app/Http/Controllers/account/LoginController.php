@@ -33,6 +33,7 @@ class LoginController extends Controller
             echo ('</pre>');
             return redirect()->route('home')->with('success','Signed in');
         }
+        else return redirect()->route('login');
     }
     public function create_user (Request $request)
     {
@@ -42,8 +43,8 @@ class LoginController extends Controller
             'phone' => 'required',
             'email' => 'required|unique:users|email',
             'address' => 'required',
-            'pass' => 'required|min:6|max:32',
-            're-pass' => 'same:pass',
+            'password' => 'required|min:6|max:32',
+            're-pass' => 'same:password',
         ] , 
         [
             'required' => 'Please fill in your :attribute.'
@@ -51,20 +52,27 @@ class LoginController extends Controller
 
         Users::create([
             'username' => $request->username,
-            'password' => bcrypt($request->pass),
+            'password' => bcrypt($request->password),
             'name' => $request->name,
             'address' => $request->address,
             'phone' => $request->phone,
             'email' => $request->email
         ]);
 
+        $credentials = $request->only('username', 'password');
+
+        echo ('<pre>');
+        print_r($credentials);
+        echo ('</pre>');
+
         if (Auth::attempt($credentials)) {
-            Auth::login($request);
+            $request->session()->put('user_details' , Auth::user());
             return redirect()->route('home');
         }
     }
     public function logout (Request $request) {
         Auth::logout();
+        $request->session()->flush();
         return redirect()->route('home');
     } 
 }
