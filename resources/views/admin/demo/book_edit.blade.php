@@ -15,6 +15,7 @@
                 <div class="card-body">
                     <form action="{{ route('admin_book_update' , $book[0]['id']) }}" method="POST">
                         @csrf
+                        {{ method_field('PUT') }}
                         <div class="form-group">
                             <label>Book name</label>
                             <input class="form-control" name="book_name" placeholder="Please enter book's name" value="{{ $book[0]['book_name'] }}" />
