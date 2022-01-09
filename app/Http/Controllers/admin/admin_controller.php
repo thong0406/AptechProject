@@ -191,6 +191,7 @@ class admin_controller extends Controller
             ]
         );
 
+        $books = Books::where('id' , '=' , $id)->get();
         foreach ($request->tag_id as $value) {
             if ($value != -1) {
                 Book_tags::where('book_id' , '=' , $id)->delete();
@@ -199,7 +200,7 @@ class admin_controller extends Controller
         foreach ($request->tag_id as $value) {
             if ($value != -1) {
                 Book_tags::create([
-                    "book_id" => $books->id,
+                    "book_id" => $books[0]['id'],
                     'tag_id' => $value
                 ]);
             }
@@ -229,7 +230,7 @@ class admin_controller extends Controller
             'bookstore_id' => $request->bookstore_id
         ]);
 
-        return view('admin.demo.book_edit' , compact('book' , 'bookstores' , 'tags'));
+        return redirect()->route('admin_book_lists')->with('success', 'Deleted successfully');
     }
     public function admin_book_delete ($id){
     	Books::find($id)->delete();
