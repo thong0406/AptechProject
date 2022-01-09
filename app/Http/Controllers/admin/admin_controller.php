@@ -5,10 +5,10 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Users;
 use App\Models\Books;
-use App\Models\Orders;
 use App\Models\Tags;
 use App\Models\Book_tags;
 use App\Models\Comments;
+use App\Models\Orders;
 use App\Models\Order_details;
 use App\Models\Bookstores;
 use Illuminate\Http\Request;
@@ -175,11 +175,60 @@ class admin_controller extends Controller
         return view('admin.demo.book_edit' , compact('book' , 'bookstores' , 'tags'));
     }
     public function admin_book_update(Request $request , $id) {
-        $book = Books::where('id' , '=' , $id)->get();
-        $bookstore = Bookstores::where('id' , '=' , $book[0]['bookstore_id'])->get();
-        $book[0]['bookstore_name'] = $bookstore[0]['name'];
-        $bookstores = Bookstores::all();
-        $tags = Tags::all();
+        $this->validate($request , [
+                'book_name' => "required",
+                'author' => "required",
+                'image' ,
+                'quantity' => "required",
+                'description' => "required",
+                'price' => "required",
+                'bookstore_id' => "required|min:0",
+                'tag_id' => "required"
+            ],
+            [
+                'required' => 'Please fill in your :attribute.',
+                'min' => 'Please pick the :attribute.'
+            ]
+        );
+
+        foreach ($request->tag_id as $value) {
+            if ($value != -1) {
+                Book_tags::where('book_id' , '=' , $id)->delete();
+            }
+        }
+        foreach ($request->tag_id as $value) {
+            if ($value != -1) {
+                Book_tags::create([
+                    "book_id" => $books->id,
+                    'tag_id' => $value
+                ]);
+            }
+        }
+
+        /*
+        if ($request->image != '') {
+            File::delete(Books::find($id)->image);
+            $image = $request->file('image');
+            $extension = $image->getClientOriginalExtension();
+            $name = time() . "." . $extension;
+            $store = $image->move('img', $name);
+            $SQLstore = 'img/' . $name;
+        }
+        else {
+            $SQLstore = Books::find($id)->image;
+        }
+        */
+
+        Books::where('id' , '=' , $id)->update([
+            'book_name' => $request->book_name,
+            'author' => $request->author,
+            'image' => $request->image , //$SQLstore,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'price' => $request->price,
+            'bookstore_id' => $request->bookstore_id
+        ]);
+
         return view('admin.demo.book_edit' , compact('book' , 'bookstores' , 'tags'));
     }
     public function admin_book_delete ($id){
@@ -223,5 +272,45 @@ class admin_controller extends Controller
     public function admin_tag_delete ($id){
         Tags::find($id)->delete();
         return redirect()->route('admin_tag_lists')->with('success', 'Created successfully');
+    }
+
+
+
+
+
+        // Orders
+    public function admin_order_lists(){
+        $orders = Orders::all();
+        return view('admin.demo.order_lists' , compact('orders'));
+    }
+    public function admin_order_details(Request $request , $id){
+        $order = Orders::where('id' , '=' , $id)->get();
+        $order_details = Order_details::where('order_id' , '=' , $order[0]['id'])->get();
+        foreach ($order_details as $key => $value) {
+            $book = Books::where('id' , '=' , $value['book_id'])->get();
+            $bookstore = Bookstores::where('id' , '=' , $book[0]['bookstore_id'])->get();
+            $value['image'] = $book[0]['image'];
+            $value['book_name'] = $book[0]['book_name'];
+            $value['bookstore_name'] = $bookstore[0]['bookstore_name'];
+            $value['author'] = $book[0]['author'];
+            $value['price'] = $book[0]['price'];
+        }
+        return view('admin.demo.order_details' , compact('order' , 'order_details'));
+    }
+    public function admin_order_delete ($id){
+        Orders::where('id' , '=' , $id)->delete();
+        return redirect()->route('admin_order_lists')->with('success', 'Order cancelled successfully');
+    }
+    public function admin_order_confirm ($id){
+        Orders::where('id' , '=' , $id)->update([
+            'status' => '1'
+        ]);
+        return redirect()->route('admin_order_lists')->with('success', 'Order confirmed successfully');
+    }
+    public function admin_order_disconfirm ($id){
+        Orders::where('id' , '=' , $id)->update([
+            'status' => '0'
+        ]);
+        return redirect()->route('admin_order_lists')->with('success', 'Order disconfirmed successfully');
     }
 }
