@@ -77,20 +77,14 @@ class DetailsController extends Controller
         ]);
 
         $books = Books::where('id' , '=' , $id)->get();
+        Books::where('id' , '=' , $id)->update([
+            'quantity'=>$books[0]['quantity'] - $request->quantity
+        ]);
         $arr = $request->session()->get('cart');
-        $id = 0 - count($arr);
         $bookstore = Bookstores::where('id' , '=' , $books[0]['bookstore_id'])->get();
 
-        $book_id = false;
-        foreach ($arr as $key => $value) {
-            if ($value["book_id"] == $books[0]["id"]) {
-                $book_id = $key;
-            }
-            if ($value['id'] > $id) $id = $value["id"];
-        }
-
-        if ($book_id == false) {
-            $arr[] = [
+        if (!isset($arr[$id])) {
+            $arr[$id] = [
                 'id'=>$id ,
                 'book_id'=>$books[0]['id'] ,
                 'book_name'=>$books[0]['book_name'] ,
@@ -103,18 +97,19 @@ class DetailsController extends Controller
             ];
         }
         else {
-            $arr[$book_id] = [
-                'id'=>$arr[$book_id]['id'] ,
+            $arr[$id] = [
+                'id'=>$id ,
                 'book_id'=>$books[0]['id'] ,
                 'book_name'=>$books[0]['book_name'] ,
                 'author'=>$books[0]['author'] ,
                 'image'=>$books[0]['image'] , 
-                'quantity'=>$arr[$book_id]["quantity"] + $request->quantity ,
+                'quantity'=>$arr[$id]['quantity'] + $request->quantity ,
                 'price'=>$books[0]['price'] ,
                 'bookstore_name'=>$bookstore[0]['bookstore_name'] ,
                 'books_stock'=>$books[0]['quantity']
             ];
         }
+
         $request->session()->put('cart' , $arr);
 
         return redirect()->route('cart')->with('success' , 'Added successfully');
@@ -129,6 +124,9 @@ class DetailsController extends Controller
             'amount'=>'required'
         ]);
         $books = Books::where('id' , '=' , $id)->get();
+        Books::where('id' , '=' , $id)->update([
+            'quantity'=>$books[0]['quantity'] - $request->amount
+        ]);
         Orders::create([
             'user_id'=>'1' ,
             'cus_name'=>$request->name ,
