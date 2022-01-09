@@ -107,4 +107,20 @@ Route::group(['prefix'=>'admin' /*, 'middleware'=>'check_admin_account'*/] , fun
 			->name('admin_tag_delete');
 
 	});
+	Route::prefix('orders')->group(function () {
+
+		Route::get('/' , [ admin_controller::class , 'admin_order_lists' ])
+			->name('admin_order_lists');
+		Route::get('/index' , [ admin_controller::class , 'admin_order_lists' ])
+			->name('admin_order_lists');
+		Route::get('/delete/{id}' , [ admin_controller::class , 'admin_order_delete' ])
+			->name('admin_order_delete');
+		Route::get('/confirm/{id}' , [ admin_controller::class , 'admin_order_confirm' ])
+			->name('admin_order_confirm');
+		Route::get('/disconfirm/{id}' , [ admin_controller::class , 'admin_order_disconfirm' ])
+			->name('admin_order_disconfirm');
+		Route::get('/details/{id}' , [ admin_controller::class , 'admin_order_details' ])
+			->name('admin_order_details');
+
+	});
 });
