@@ -7,8 +7,10 @@ use App\Models\Users;
 use App\Models\Books;
 use App\Models\Orders;
 use App\Models\Order_details;
+use App\Models\Comments;
 use App\Models\Bookstores;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -18,6 +20,12 @@ class cart_controller extends Controller
         if (!$request->session()->has('cart')) {
             $request->session()->put('cart' , []);
         }
+
+        /*
+        echo ('<pre>');
+        print_r($request->session()->get('cart'));
+        echo ('</pre>');
+        */
 
         /*
         $books = Books::all();
@@ -42,14 +50,27 @@ class cart_controller extends Controller
         */
 
         $cart = $request->session()->get('cart');
+        $books = Books::all()->random(4);
+        foreach ($books as $key => $value) {
+            $comments = Comments::where('book_id' , '=' , $value['id'])->get();
+            $stars = 5;
+            foreach ($comments as $key2 => $comment) {
+                $stars += $comment['rating'];
+            }
+            $stars = round($stars/(count($comments)+1));
+            $books[$key]['stars'] = $stars;
+        }
 
-        return view('bakery.test.cart' , compact("cart"));
+        return view('bakery.test.cart' , compact("cart" , 'books'));
     }
     public function cart_update(Request $request , $id) {
     	$this->validate($request , [
     		'quantity'
     	]);
     	$arr = $request->session()->get('cart');
+        Books::where('id' , '=' , $arr[$id]['book_id'])->update([
+            'quantity'=>$books[0]['quantity'] + ($arr[$id]['quantity'] - $request->quantity)
+        ]);
     	$arr[$id] = [
     		'id'=>$id ,
             'book_id'=>$arr[$id]['book_id'] ,
@@ -103,12 +124,17 @@ class cart_controller extends Controller
         return redirect()->route('cart')->with('success' , 'Bought successfully');
     }
     public function cart_delete(Request $request , $id) {
-        $this->validate($request , [
-            'quantity'
-        ]);
         $arr = $request->session()->get('cart');
+        Books::where('id' , '=' , $arr[$id]['book_id'])->update([
+            'quantity'=>$books[0]['quantity'] + $arr[$id]['quantity']
+        ]);
         unset($arr[$id]);
         $request->session()->put('cart' , $arr);
+        return redirect()->route('cart')->with('success' , 'Deleted successfully');
+    }
+
+    public function cart_delete_all (Request $request) {
+        $request->session()->put('cart' , []);
         return redirect()->route('cart')->with('success' , 'Deleted successfully');
     }
 }
