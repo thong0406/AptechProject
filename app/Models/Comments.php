@@ -11,11 +11,10 @@ class Comments extends Model
     protected $table='comments';
 
     protected $fillable = [
-		'id'	,
 		'book_id'	,
 		'user_id'	,
 		'comment'	,
-		'rating'	,
+		'rating'
 	];
 
 	public function books() {
