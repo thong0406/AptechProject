@@ -53,11 +53,10 @@
                                 </select>
                                 @if (session('user_details')) 
                                     <button class="btn rounded-pill btn-warning mb-2" type="submit" style="width: 100%;">Add to cart</button>
-                                    <button class="btn rounded-pill btn-warning" type="button" style="width: 100%;" data-toggle="modal" data-target="#buy_now">Buy now</button>
                                 @else
                                     <a class="btn rounded-pill btn-warning mb-2" href="{{ route('login') }}" style="width: 100%;">Add to cart</a>
-                                    <a class="btn rounded-pill btn-warning" href="{{ route('login') }}" style="width: 100%;">Buy now</a>
                                 @endif
+                                <button class="btn rounded-pill btn-warning" type="button" style="width: 100%;" data-toggle="modal" data-target="#buy_now">Buy now</button>
                             </div>
                         </form>
 
@@ -73,22 +72,41 @@
                                     <form method="POST" action="{{ route('order_now' , $value['id']) }}">
                                         @csrf
                                         <div class="modal-body">
-                                            <div class="form-group">
-                                                <label for="order_name">Full name</label>
-                                                <input type="text" name="name" class="form-control" id="order_name" placeholder="John M. Doe">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="form_address">Address</label>
-                                                <input type="text" name="address" class="form-control" id="form_address" placeholder="542 W. 15th Street">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="form_email">Email address</label>
-                                                <input type="email" name="email" class="form-control" id="form_email" placeholder="johndoe@example.com">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="form_phone">Phonenumber</label>
-                                                <input type="text" name="phonenumber" class="form-control" id="form_phone" placeholder="">
-                                            </div>
+                                            @if (session('user_details'))
+                                                <div class="form-group">
+                                                    <label for="order_name">Full name</label>
+                                                    <input type="text" name="name" class="form-control" id="order_name" placeholder="John M. Doe" value="{{ session('user_details')->name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="form_address">Address</label>
+                                                    <input type="text" name="address" class="form-control" id="form_address" placeholder="542 W. 15th Street" value="{{ session('user_details')->address }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="form_email">Email address</label>
+                                                    <input type="email" name="email" class="form-control" id="form_email" placeholder="johndoe@example.com" value="{{ session('user_details')->email }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="form_phone">Phonenumber</label>
+                                                    <input type="text" name="phonenumber" class="form-control" id="form_phone" placeholder="" value="{{ session('user_details')->phone }}">
+                                                </div>
+                                            @else
+                                                <div class="form-group">
+                                                    <label for="order_name">Full name</label>
+                                                    <input type="text" name="name" class="form-control" id="order_name" placeholder="John M. Doe">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="form_address">Address</label>
+                                                    <input type="text" name="address" class="form-control" id="form_address" placeholder="542 W. 15th Street">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="form_email">Email address</label>
+                                                    <input type="email" name="email" class="form-control" id="form_email" placeholder="johndoe@example.com">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="form_phone">Phonenumber</label>
+                                                    <input type="text" name="phonenumber" class="form-control" id="form_phone" placeholder="">
+                                                </div>
+                                            @endif
                                             <div class="form-group">
                                                 <label for="form_amount">Amount</label>
                                                 <select class="form-control" id="form_amount" name="amount">

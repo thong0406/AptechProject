@@ -26,7 +26,7 @@
 					</select><br>
 					Tags :
 					<select name="tags" aria-label="Default select example">
-						<option value="-1" selected></option>
+						<option value="" selected></option>
 						@foreach ($tags as $key => $value)
 							<option value="{{ $value['id'] }}">{{ $value['tag_name'] }}</option>
 						@endforeach

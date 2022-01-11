@@ -8,7 +8,7 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Orders</h1>
+        <h1 class="h3 mb-2 text-gray-800">Orders{{ $print }}</h1>
 
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
@@ -18,6 +18,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Id</th>
+                                    <th scope="col">Account</th>
                                     <th scope="col">Customer</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">Phonenumber</th>
@@ -30,6 +31,7 @@
                             <tfoot>
                                 <tr>
                                     <th scope="col">Id</th>
+                                    <th scope="col">Account</th>
                                     <th scope="col">Customer</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">Phonenumber</th>
@@ -43,6 +45,7 @@
                                 @foreach ($orders as $value)
                                     <tr>
                                         <th scope="row">{{$value['id']}}</th>
+                                        <td>{{$value['username']}}</td>
                                         <td>{{$value['cus_name']}}</td>
                                         <td>{{$value['address']}}</td>
                                         <td>{{$value['phone']}}</td>

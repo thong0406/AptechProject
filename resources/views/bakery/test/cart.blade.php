@@ -81,32 +81,24 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form method="POST" action="{{ route('order_now' , $value['id']) }}">
+                                    <form method="POST" action="{{ route('cart_order') }}">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <label for="order_name">Full name</label>
-                                                <input type="text" name="name" class="form-control" id="order_name" placeholder="John M. Doe">
+                                                <input type="text" name="name" class="form-control" id="order_name" placeholder="John M. Doe" value="{{ session('user_details')->name }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="form_address">Address</label>
-                                                <input type="text" name="address" class="form-control" id="form_address" placeholder="542 W. 15th Street">
+                                                <input type="text" name="address" class="form-control" id="form_address" placeholder="542 W. 15th Street" value="{{ session('user_details')->address }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="form_email">Email address</label>
-                                                <input type="email" name="email" class="form-control" id="form_email" placeholder="johndoe@example.com">
+                                                <input type="email" name="email" class="form-control" id="form_email" placeholder="johndoe@example.com" value="{{ session('user_details')->email }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="form_phone">Phonenumber</label>
-                                                <input type="text" name="phonenumber" class="form-control" id="form_phone" placeholder="">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="form_amount">Amount</label>
-                                                <select class="form-control" id="form_amount" name="amount">
-                                                    @for ($i = 1 ; $i <= $value['quantity'] ; $i++)
-                                                        <option>{{ $i }}</option>
-                                                    @endfor
-                                                </select>
+                                                <input type="text" name="phonenumber" class="form-control" id="form_phone" placeholder="" value="{{ session('user_details')->phone }}">
                                             </div>
                                             <div class="form-check">
                                                 <input name="send_message" type="checkbox" class="form-input" id="send_message">
@@ -132,32 +124,33 @@
 				<a style="" href="{{ route('home') }}" align="center">Return to home</a><br>
 				<a style="" href="" align="center">Check orders</a>
 			</div>
-			<h3 style="margin-left: auto; width: 100%;">Suggestions</h3>
-			<div class="books">
-				@foreach ($books as $key => $value)
-					<div class="single-book">
-						<a href="{{ route('book_details' , $value['id']) }}" class="single-book__img">
-							<img src="{{ asset($value['image']) }}" style="width: 241px;" alt="single book and cd">
-							<div class="single-book_download">
-								<img src="./bakery/img/svg/download.svg" alt="book image">
-							</div>
-						</a>
-						<h4 class="single-book__title">{{ $value['book_name'] }}</h4>
-						<span class="single-book__price">${{ $value['price'] }}</span>
-						<!-- star rating -->
-						<div class="rating">
-							@for ($i=0 ; $i < 5-$value['stars'] ; $i++)
-								<span>&#9734;</span>
-							@endfor
-							@for ($i=0 ; $i < $value['stars'] ; $i++)
-								<span>&#9733;</span>
-							@endfor
-						</div>
-						<!-- star rating end -->
-					</div>
-				@endforeach
-			</div>
 		@endif
+
+		<h3 style="margin-left: auto; width: 100%;">Suggestions</h3>
+		<div class="books">
+			@foreach ($books as $key => $value)
+				<div class="single-book">
+					<a href="{{ route('book_details' , $value['id']) }}" class="single-book__img">
+						<img src="{{ asset($value['image']) }}" style="width: 241px;" alt="single book and cd">
+						<div class="single-book_download">
+							<img src="./bakery/img/svg/download.svg" alt="book image">
+						</div>
+					</a>
+					<h4 class="single-book__title">{{ $value['book_name'] }}</h4>
+					<span class="single-book__price">${{ $value['price'] }}</span>
+					<!-- star rating -->
+					<div class="rating">
+						@for ($i=0 ; $i < 5-$value['stars'] ; $i++)
+							<span>&#9734;</span>
+						@endfor
+						@for ($i=0 ; $i < $value['stars'] ; $i++)
+							<span>&#9733;</span>
+						@endfor
+					</div>
+					<!-- star rating end -->
+				</div>
+			@endforeach
+		</div>
 	</div>
 	<br>
 @endsection

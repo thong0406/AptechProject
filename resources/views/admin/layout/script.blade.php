@@ -1,5 +1,6 @@
 <script src="{{ asset("admin_template/vendor/jquery/jquery.min.js") }}"></script>
 <script src="{{ asset("admin_template/vendor/bootstrap/js/bootstrap.bundle.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset('other/js/scripts.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
 <script src="{{ asset("admin_template/vendor/jquery-easing/jquery.easing.min.js") }}"></script>
@@ -13,7 +14,3 @@
     <!-- Page level custom scripts -->
 <script src="{{ asset("admin_template/js/demo/chart-area-demo.js") }}"></script>
 <script src="{{ asset("admin_template/js/demo/chart-pie-demo.js") }}"></script>
-
-<script type="text/javascript">
-	
-</script>

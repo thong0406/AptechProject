@@ -22,6 +22,7 @@
                                     <th scope="col">Username</th>
                                     <th scope="col">Phonenumber</th>
 									<th scope="col">Email</th>
+                                    <th scope="col">Level</th>
 									<th scope="col">Created at</th>
 									<th colspan="2"></th>
 								</tr>
@@ -33,34 +34,32 @@
                                     <th scope="col">Username</th>
                                     <th scope="col">Phonenumber</th>
 									<th scope="col">Email</th>
+                                    <th scope="col">Level</th>
 									<th scope="col">Created at</th>
 									<th colspan="2"></th>
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($users as $value)
-                                	@if ($value['is_admin'] != '2')
-										<tr>
-											<th scope="row">{{$value['id']}}</th>
-											<td>{{$value['name']}}</td>
-                                            <td>{{$value['username']}}</td>
-                                            <td>{{$value['phone']}}</td>
-											<td>{{$value['email']}}</td>
-											<td>{{$value['created_at']->toDateString() }}</td>
-											<td>
-                                                <ul>
-                                                    <li><a href="{{ Route('admin_user_delete', $value['id'] ) }}">Delete</a></li>
-                                                    <li><a href="{{ Route('admin_order_lists', $value['id'] ) }}">Orders</a></li>
-                                                    <li><a href="{{ Route('admin_user_delete', $value['id'] ) }}">Comments</a></li>
-                                                </ul>
-                                            </td>
-										</tr>
-									@endif
-								@endforeach
+                                @foreach ($admins as $value)
+                                	<tr>
+										<th scope="row">{{$value['id']}}</th>
+										<td>{{$value['name']}}</td>
+                                        <td>{{$value['username']}}</td>
+                                        <td>{{$value['phonenumber']}}</td>
+										<td>{{$value['email']}}</td>
+                                        <td>{{$value['level']}}</td>
+										<td>{{$value['created_at']->toDateString() }}</td>
+										<td>
+                                            <ul>
+                                                <li><a href="{{ Route('admin_admin_delete', $value['id'] ) }}">Delete</a></li>
+                                            </ul>
+                                        </td>
+									</tr>
+				    			@endforeach
                             </tbody>
                         </table>
                     </div>
-                    <a href='{{ Route('admin_user_add') }}' class="btn btn-primary">Add user</a>
+                    <a href='{{ Route('admin_admin_add') }}' class="btn btn-primary">Add admin</a>
                 </div>
             </div>
 

@@ -6,19 +6,14 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header" style='width: 100%;'>
                 <div class="row">
-                    <div class="col-md-5 col-sm-5 col-xl-5">
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                         <div class="row">
-                            <div class="col-md-3 col-xs-3 col-sm-3">
-                                <a style="padding-top:0px;" class="navbar-brand navBrandText text-uppercase font-weight-bold" href="index.html">
-                                    <img src="/bakery/img/logo/cemrebakerylogo.png" alt="restorant" />
-                                </a>
-                            </div>
-                            <div class="col-md-9 col-sm-9 col-xs-9">
-                                <a href="index.html"><img class="img-responsive logo" src="/bakery/img/logo/cemrebakerytextlogolight.png" alt="restorant" /></a>
-                            </div>
+                            <a style="padding-top:0px;" class="navbar-brand navBrandText text-uppercase font-weight-bold" href="index.html">
+                                <img src="/bakery/img/logo/cemrebakerylogo.png" alt="restorant" />
+                            </a>
                         </div>
                     </div>
-                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4">
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <form method="POST" action="{{ route('search_store') }}">
                             @csrf
                             <div style="display: inline-flex; border-radius: 40px; background-color: none; padding: 2px; border: 1px solid lightgray; width: 100%;">
@@ -31,17 +26,17 @@
                         </form>
                     </div>
                     @if (session('user_details'))
-                        <div class="col-sm-4 col-md-4 col-lg-3 col-xl-3">
+                        <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                 <ul class="nav navbar-nav d-flex" style="flex-direction: row; float: right;">
                                     <li class="nav-item mx-2"><a href='{{ route('home') }}' class="nav-link text-uppercase font-weight-bold js-scroll-trigger">HOME</a></li>
                                     <li class="mx-2" style="width: 35px;">
                                         <div class="py-2">
                                             <a href="#/" class="py-0" data-toggle="dropdown" id="my_account_btn">
-                                                <img src="{{ asset(session('user_details')->image) }}" class="rounded-pill" style="width: 100%;">
+                                                <img src="{{ asset(session('user_details')->image) }}" class="pfp rounded-pill">
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="my_account_btn" style="position: absolute;">
-                                                <a class="dropdown-item" href="#">Acount setting</a>
+                                                <a class="dropdown-item" href="{{ route('user_settings') }}">Acount setting</a>
                                                 <a class="dropdown-item" href="{{ route('cart') }}">Cart</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item text-danger" href="{{ route('logout') }}">Log out</a>

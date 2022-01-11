@@ -19,4 +19,5 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-grid.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-reboot.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('other/css/stylesheet.css') }}">
 <script src="/bakery/js/vendor/modernizr-2.8.3.min.js"></script>

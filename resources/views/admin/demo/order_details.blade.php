@@ -60,8 +60,12 @@
                         Confirm
                     </a>
                     <a href='{{ Route('admin_order_disconfirm' , $order_details[0]['id']) }}'
-                        class="btn btn-danger @if ($order[0]['status'] == 0) disabled @endif">
+                        class="btn btn-secondary @if ($order[0]['status'] == 0) disabled @endif">
                         Disconfirm
+                    </a>
+                    <a href='{{ Route('admin_order_delete' , $order_details[0]['id']) }}'
+                        class="btn btn-danger @if ($order[0]['status'] == 0) disabled @endif">
+                        Cancel
                     </a>
                 </div>
             </div>
