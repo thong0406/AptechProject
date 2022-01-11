@@ -4,8 +4,9 @@ namespace App\Http\Controllers\account;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Users;
+use App\Models\Admins;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -26,11 +27,7 @@ class LoginController extends Controller
         ]);
         $credentials = $request->only('username', 'password');
         if (Auth::attempt($credentials)) {
-                // Đổi thành Route home nếu có
             $request->session()->put('user_details' , Auth::user());
-            echo ('<pre>');
-            print_r($request->session()->get('user_details'));
-            echo ('</pre>');
             return redirect()->route('home')->with('success','Signed in');
         }
         else return redirect()->route('login');
@@ -70,9 +67,68 @@ class LoginController extends Controller
             return redirect()->route('home');
         }
     }
+
+
+
+        // Admin
+    public function admin_signin()
+    {
+        return view('loginform.view.admin_signin');
+    }
+    public function admin_signup()
+    {
+        return view('loginform.view.admin_signup');
+    }
+    public function create_admin (Request $request)
+    {
+        $this->validate($request , [
+            'name' => 'required',
+            'username'=> 'required',
+            'name'=> 'required',
+            'password' => 'required|min:6|max:32',
+            're-pass' => 'same:password',
+        ] , 
+        [
+            'required' => 'Please fill in your :attribute.'
+        ]);
+
+        Admins::create([
+            'username' => $request->username ,
+            'password' => bcrypt($request->password) ,
+            'name' => $request->name ,
+            'level' => 1
+        ]);
+
+        $credentials = $request->only('username', 'password');
+
+        echo ('<pre>');
+        print_r($credentials);
+        echo ('</pre>');
+
+        if (Auth::guard('admin')->attempt($credentials)) {
+            $request->session()->put('admin_details' , Auth::guard('admin')->user());
+            return redirect()->route('admin_book_lists');
+        }
+    }
+    public function auth_admin (Request $request)
+    {
+        $this->validate($request, [
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+        $credentials = $request->only('username', 'password');
+        if (Auth::guard('admin')->attempt($credentials)) {
+            $request->session()->put('admin_details' , Auth::guard('admin')->user());
+            return redirect()->route('admin_book_lists');
+        }
+        else return redirect()->route('admin_login');
+    }
+
+
+
     public function logout (Request $request) {
         Auth::logout();
         $request->session()->flush();
         return redirect()->route('home');
-    } 
+    }
 }

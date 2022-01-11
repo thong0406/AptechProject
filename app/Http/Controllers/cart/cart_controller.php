@@ -48,7 +48,7 @@ class cart_controller extends Controller
         }
         $request->session()->put('cart' , $arr);
         */
-
+        
         $cart = $request->session()->get('cart');
         $books = Books::all()->random(4);
         foreach ($books as $key => $value) {
@@ -86,12 +86,19 @@ class cart_controller extends Controller
         return redirect()->route('cart')->with('success' , 'Updated successfully');
     }
     public function cart_order(Request $request) {
+        $this->validate($request , [
+            'name'=>'required' ,
+            'phonenumber'=>'required' ,
+            'email'=>'required' ,
+            'address'=>'required'
+        ]);
+        $user_details = $request->session()->get('user_details');
         $arr = [
-            'user_id'=>'1' ,
-            'cus_name'=>'Taisa' ,
-            'address'=>'ALC-Faction' ,
-            'phone'=>'123123123' ,
-            'email'=>'tis123@gmail.com' ,
+            'user_id'=>$user_details->id ,
+            'cus_name'=>$request->name ,
+            'address'=>$request->address ,
+            'phone'=>$request->phonenumber ,
+            'email'=>$request->email ,
             'payment'=>'' ,  
             'status'=>'0'
         ];
@@ -102,15 +109,7 @@ class cart_controller extends Controller
         }
         $arr['payment'] = $full_price;
 
-        Orders::create([
-            'user_id'=>'1' ,
-            'cus_name'=>'Taisa' ,
-            'address'=>'ALC-Faction' ,
-            'phone'=>'123123123' ,
-            'email'=>'tis123@gmail.com' ,
-            'payment'=> $full_price ,  
-            'status'=>'0'
-        ]);
+        Orders::create($arr);
         foreach ($cart as $key => $value) {
             Order_details::create([
                 'order_id'=>Orders::max('id'),

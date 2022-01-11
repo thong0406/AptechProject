@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users;
+use App\Models\Admins;
 use App\Models\Books;
 use App\Models\Tags;
 use App\Models\Book_tags;
@@ -14,6 +15,7 @@ use App\Models\Bookstores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class admin_controller extends Controller
 {
@@ -49,7 +51,7 @@ class admin_controller extends Controller
             'password' => bcrypt($request->password),
             'name' => $request->name,
             'address' => $request->address,
-            'phone' => $request->phone,
+            'phonenumber' => $request->phone,
             'email' => $request->email //Hash::make($request->password)
         ]);
 
@@ -57,7 +59,50 @@ class admin_controller extends Controller
     }
     public function admin_user_delete ($id){
     	Users::find($id)->delete();
-        return redirect()->route('admin_bookstore_lists')->with('success', 'Created successfully');
+        return redirect()->route('admin_user_lists')->with('success', 'Created successfully');
+    }
+
+
+
+
+
+        // Admins
+    public function admin_admin_lists(Request $request){
+        $admins = Admins::where('level' , '!=' , '1')->get();
+        return view('admin.demo.admin_lists' , compact('admins'));
+    }
+    public function admin_admin_add(){
+        return view('admin.demo.admin_add');
+    }
+
+    public function admin_admin_store(Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+            'username'=> 'required',
+            'phone' => 'required',
+            'email' => 'required|unique:users|email',
+            'password' => 'required|min:6|max:32',
+            'confirm' => 'same:password',
+        ] , 
+        [
+            'required' => 'Please fill in your :attribute.'
+        ]);     
+
+        echo bcrypt($request->password);
+
+        Admins::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+            'phonenumber' => $request->phone,
+            'email' => $request->email //Hash::make($request->password)
+        ]);
+
+        return redirect()->route('admin_admin_lists')->with('success', 'Created successfully');
+    }
+    public function admin_admin_delete ($id){
+        Users::find($id)->delete();
+        return redirect()->route('admin_admin_lists')->with('success', 'Created successfully');
     }
 
 
@@ -80,7 +125,7 @@ class admin_controller extends Controller
         ] , 
         [
             'required' => 'Please fill in your :attribute.'
-        ]);     
+        ]);
 
         Bookstores::create([
             'bookstore_name' => $request->name,
@@ -99,7 +144,7 @@ class admin_controller extends Controller
 
 
     	// Books
-    public function admin_book_lists(){
+    public function admin_book_lists(Request $request){
     	$books = Books::all();
     	foreach ($books as $key => $value) {
     		$bookstores = Bookstores::where("id" , "=" , $value['bookstore_id'])->get();
@@ -280,9 +325,24 @@ class admin_controller extends Controller
 
 
         // Orders
-    public function admin_order_lists(){
-        $orders = Orders::all();
-        return view('admin.demo.order_lists' , compact('orders'));
+    public function admin_order_lists(Request $request , $id=-1){
+        if ($id != -1) {
+            $orders = Orders::where('user_id' , '=' , $id)->get();
+            foreach ($orders as $key => $value) {
+                $user = Users::where('id' , '=' , $value['user_id'])->get();
+                $value['username'] = $user[0]['username'];
+            }
+            $print = ' - Orders from "' .$user[0]['username'] .'"';
+        } 
+        else {
+            $print = '';
+            $orders = Orders::all();
+            foreach ($orders as $key => $value) {
+                $user = Users::where('id' , '=' , $value['user_id'])->get();
+                $value['username'] = $user[0]['username'];
+            }
+        }
+        return view('admin.demo.order_lists' , compact('orders' , 'print'));
     }
     public function admin_order_details(Request $request , $id){
         $order = Orders::where('id' , '=' , $id)->get();

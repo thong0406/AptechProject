@@ -26,7 +26,6 @@ class search_controller extends Controller
 		];
 		if ($param['type'] == '') $param['type'] = 'book_name';
 
-
 		$delimeter = ' ';
 		$keywords = explode($delimeter, $param['search']);
 

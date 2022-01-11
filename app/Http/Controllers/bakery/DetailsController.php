@@ -12,6 +12,7 @@ use App\Models\Tags;
 use App\Models\Comments;
 use App\Models\Bookstores;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class DetailsController extends Controller
@@ -127,8 +128,9 @@ class DetailsController extends Controller
         Books::where('id' , '=' , $id)->update([
             'quantity'=>$books[0]['quantity'] - $request->amount
         ]);
-        Orders::create([
-            'user_id'=>'1' ,
+        $user_details = $request->session()->get('user_details');
+        $order = Orders::create([
+            'user_id'=>$user_details->id ,
             'cus_name'=>$request->name ,
             'address'=>$request->address ,
             'phone'=>$request->phonenumber ,
@@ -137,8 +139,8 @@ class DetailsController extends Controller
             'status'=>'0'
         ]);
         Order_details::create([
-            'order_id'=>Orders::max('id') ,
-            'book_id'=>$books[0]['id'] ,
+            'order_id'=>$order->id ,
+            'book_id'=>$id ,
             'quantity'=>$request->amount ,
             'price'=>$books[0]['price'] * $request->amount
         ]);
