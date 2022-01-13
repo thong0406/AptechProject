@@ -124,8 +124,9 @@ class cart_controller extends Controller
     }
     public function cart_delete(Request $request , $id) {
         $arr = $request->session()->get('cart');
+        $book = Books::where('id' , '=' , $arr[$id]['book_id'])->get();
         Books::where('id' , '=' , $arr[$id]['book_id'])->update([
-            'quantity'=>$books[0]['quantity'] + $arr[$id]['quantity']
+            'quantity'=>$book[0]['quantity'] + $arr[$id]['quantity']
         ]);
         unset($arr[$id]);
         $request->session()->put('cart' , $arr);
@@ -133,6 +134,13 @@ class cart_controller extends Controller
     }
 
     public function cart_delete_all (Request $request) {
+        $arr = $request->session()->get('cart');
+        foreach ($arr as $key => $value) {
+            $book = Books::where('id' , '=' , $value['id'])->get();
+            Books::where('id' , '=' , $value['book_id'])->update([
+                'quantity'=>$book[0]['quantity'] + $value['quantity']
+            ]);
+        }
         $request->session()->put('cart' , []);
         return redirect()->route('cart')->with('success' , 'Deleted successfully');
     }

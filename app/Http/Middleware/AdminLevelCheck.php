@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class CheckAdminAccount
+class AdminLevelCheck
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,8 @@ class CheckAdminAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->session()->has('admin_details')) {
-            return redirect()->route('admin_login');
+        if ($request->session()->get('admin_details')->level != '1') {
+            return redirect()->route('admin_book_lists');
         }
         return $next($request);
     }

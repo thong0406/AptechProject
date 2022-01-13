@@ -23,6 +23,57 @@ class admin_controller extends Controller
         return view('admin.demo.test');
     }
 
+    public function admin_account_settings(){
+        return view('admin.demo.admin_account_settings');
+    }
+    public function admin_account_update_image (Request $request) {
+        $this->validate($request , [
+            'image'=>'required'
+        ]);
+
+        $image = $request->file('image');
+        $name = basename($request->session()->get('admin_details')->image);
+        if ($name == 'default.jpg') {
+            $extension = $image->getClientOriginalExtension();
+            $name = time() . "." . $extension;
+        }
+        $store = $image->move('img/pfp', $name);
+        $SQLstore = 'img/pfp/' . $name;
+
+        Admins::where('id' , '=' , $request->session()->get('admin_details')->id)->update([
+            'image'=>$SQLstore
+        ]);
+
+        $request->session()->put('admin_details' , Auth::user());
+
+        return redirect()->route('admin_account_settings');
+    }
+
+    public function admin_account_update_details (Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+            'username'=> 'required',
+            'password'=> 'required',
+            'phonenumber' => 'required|max:10',
+            'email' => 'required|unique:users|email'
+        ] , 
+        [
+            'required' => 'Please fill in your :attribute.'
+        ]);
+
+        Admins::where('id' , '=' , $request->session()->get('admin_details')->id)->update([
+            'name' => $request->name ,
+            'username'=> $request->username ,
+            'password'=> bcrypt($request->password) ,
+            'phonenumber' => $request->phonenumber ,
+            'email' => $request->email
+        ]);
+
+        $request->session()->put('admin_details' , Auth::user());
+
+        return redirect()->route('admin_account_settings');
+    }
+
     	// Users
     public function admin_user_lists(){
     	$users = Users::all();
@@ -31,7 +82,6 @@ class admin_controller extends Controller
     public function admin_user_add(){
         return view('admin.demo.user_add');
     }
-
     public function admin_user_store(Request $request){
         $this->validate($request, [
             'name' => 'required',
@@ -66,6 +116,38 @@ class admin_controller extends Controller
 
 
 
+        // Comments
+    public function admin_comment_lists (Request $request) {
+        $user_id = $request->user_id;
+        $book_id = $request->book_id;
+        $comments = Comments::where('id' , '!=' , '0');
+        if (!is_null($user_id)) {
+            $user = Users::where('id' , '=' , $user_id)->get();
+            $print = "Comments from user#" .$user_id ." - " .$user[0]['username'];
+            $comments->where('user_id' , '=' , $user_id);
+        }
+        if (!is_null($book_id)) {
+            $book = Books::where('id' , '=' , $book_id)->get();
+            $print = "Comments from book#" .$book_id ." - " .$book[0]['book_name'];
+            $comments->where('book_id' , '=' , $book_id);
+        }
+        $comments = $comments->get();
+
+        foreach ($comments as $key => $value) {
+            $book = Books::where('id' , '=' , $value['book_id'])->get();
+            $user = Users::where('id' , '=' , $value['user_id'])->get();
+            $value['book_name'] = $book[0]['book_name'];
+            $value['username'] = $user[0]['username'];
+            $value['image'] = $user[0]['image'];
+        }
+
+        return view('admin.demo.comments_lists' , compact('comments' , 'print'));
+    }
+
+
+
+
+
         // Admins
     public function admin_admin_lists(Request $request){
         $admins = Admins::where('level' , '!=' , '1')->get();
@@ -74,7 +156,6 @@ class admin_controller extends Controller
     public function admin_admin_add(){
         return view('admin.demo.admin_add');
     }
-
     public function admin_admin_store(Request $request){
         $this->validate($request, [
             'name' => 'required',
@@ -117,7 +198,6 @@ class admin_controller extends Controller
     public function admin_bookstore_add(){
         return view('admin.demo.bookstore_add');
     }
-
     public function admin_bookstore_store(Request $request){
         $this->validate($request, [
             'name' => 'required',
@@ -137,6 +217,28 @@ class admin_controller extends Controller
     public function admin_bookstore_delete ($id){
     	Bookstores::find($id)->delete();
         return redirect()->route('admin_bookstore_lists')->with('success', 'Created successfully');
+    }
+    public function admin_bookstore_edit(Request $request , $id) {
+        $bookstore = Bookstores::where('id' , '=' , $id)->get();
+        return view('admin.demo.bookstore_edit' , compact('bookstore'));
+    }
+    public function admin_bookstore_update(Request $request , $id) {
+        $this->validate($request , [
+                'bookstore_name' => "required" ,
+                'information' => 'required'
+            ],
+            [
+                'required' => 'Please fill in your :attribute.',
+                'min' => 'Please pick the :attribute.'
+            ]
+        );
+
+        Bookstores::where('id' , '=' , $id)->update([
+            'bookstore_name' => $request->bookstore_name,
+            'information' => $request->information
+        ]);
+
+        return redirect()->route('admin_bookstore_lists')->with('success', 'Updated successfully');
     }
 
 
@@ -212,23 +314,21 @@ class admin_controller extends Controller
         return redirect()->route('admin_book_lists')->with('success', 'Created successfully');
     }
     public function admin_book_edit(Request $request , $id) {
-        $book = Books::where('id' , '=' , $id)->get();
-        $bookstore = Bookstores::where('id' , '=' , $book[0]['bookstore_id'])->get();
-        $book[0]['bookstore_name'] = $bookstore[0]['name'];
+        $books = Books::where('id' , '=' , $id)->get();
         $bookstores = Bookstores::all();
         $tags = Tags::all();
-        return view('admin.demo.book_edit' , compact('book' , 'bookstores' , 'tags'));
+
+        return view('admin.demo.book_edit' , compact('books' , 'bookstores' , 'tags'));
     }
     public function admin_book_update(Request $request , $id) {
         $this->validate($request , [
                 'book_name' => "required",
                 'author' => "required",
-                'image' ,
                 'quantity' => "required",
                 'description' => "required",
                 'price' => "required",
                 'bookstore_id' => "required|min:0",
-                'tag_id' => "required"
+                'tags' => "required"
             ],
             [
                 'required' => 'Please fill in your :attribute.',
@@ -237,38 +337,41 @@ class admin_controller extends Controller
         );
 
         $books = Books::where('id' , '=' , $id)->get();
-        foreach ($request->tag_id as $value) {
-            if ($value != -1) {
-                Book_tags::where('book_id' , '=' , $id)->delete();
+        if (!is_null($request->tags)) {
+            $tag_add = [];
+            foreach ($request->tags as $value) {
+                if ($value != '-1') {
+                    $tag_add[] = [
+                        'book_id'=> $id ,
+                        'tag_id' => $value
+                    ];
+                    Book_tags::where('book_id' , '=' , $id)->delete();
+                }
             }
-        }
-        foreach ($request->tag_id as $value) {
-            if ($value != -1) {
+
+            foreach ($tag_add as $key => $value) {
                 Book_tags::create([
-                    "book_id" => $books[0]['id'],
-                    'tag_id' => $value
+                    "book_id" => $value['book_id'],
+                    'tag_id' => $value['tag_id']
                 ]);
             }
         }
 
-        /*
-        if ($request->image != '') {
-            File::delete(Books::find($id)->image);
+        
+        if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $extension = $image->getClientOriginalExtension();
-            $name = time() . "." . $extension;
+            $name = basename($books[0]['image']);
             $store = $image->move('img', $name);
             $SQLstore = 'img/' . $name;
         }
         else {
             $SQLstore = Books::find($id)->image;
         }
-        */
 
         Books::where('id' , '=' , $id)->update([
             'book_name' => $request->book_name,
             'author' => $request->author,
-            'image' => $request->image , //$SQLstore,
+            'image' => $SQLstore,
             'quantity' => $request->quantity,
             'description' => $request->description,
             'price' => $request->price,
@@ -280,11 +383,6 @@ class admin_controller extends Controller
     public function admin_book_delete ($id){
     	Books::find($id)->delete();
         return redirect()->route('admin_book_lists')->with('success', 'Deleted successfully');
-    }
-    public function admin_book_comments ($id){
-        $comments = Comments::where('book_id' , '=' , $id)->get();
-        $books = Books::find($id);
-        return view('admin.');
     }
 
 
@@ -299,7 +397,6 @@ class admin_controller extends Controller
     public function admin_tag_add(){
         return view('admin.demo.tag_add');
     }
-
     public function admin_tag_store(Request $request){
         $this->validate($request, [
             'tag_name' => 'required'
@@ -318,6 +415,26 @@ class admin_controller extends Controller
     public function admin_tag_delete ($id){
         Tags::find($id)->delete();
         return redirect()->route('admin_tag_lists')->with('success', 'Created successfully');
+    }
+    public function admin_tag_edit(Request $request , $id) {
+        $tag = Tags::where('id' , '=' , $id)->get();
+        return view('admin.demo.tag_edit' , compact('tag'));
+    }
+    public function admin_tag_update(Request $request , $id) {
+        $this->validate($request , [
+                'tag_name' => "required"
+            ],
+            [
+                'required' => 'Please fill in your :attribute.',
+                'min' => 'Please pick the :attribute.'
+            ]
+        );
+
+        Tags::where('id' , '=' , $id)->update([
+            'tag_name' => $request->tag_name,
+        ]);
+
+        return redirect()->route('admin_tag_lists')->with('success', 'Updated successfully');
     }
 
 
