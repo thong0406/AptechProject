@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @section('title')
-    Category
+    Moderate Users
 @endsection
 
 @section('content')

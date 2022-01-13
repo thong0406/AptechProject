@@ -138,7 +138,9 @@
                 @foreach ($comments as $key => $value)
                     <div class="row mt-4" style="margin-top: 10px; width: 100%;">
                         <div class="comment text-justify" style="width: 100%;">
-                            <img src="{{ asset($value['image']) }}" alt="" class="rounded-circle" width="40" height="40">
+                            <div style="width: 40px">
+                                <img src="{{ asset($value['image']) }}" class="pfp rounded-pill">
+                            </div>
                             <h6>{{ $value['username'] }}</h6> <span>- {{ $value['date'] }}</span>
                             <span>
                                 @for ($i=0 ; $i < $value['stars'] ; $i++)
@@ -158,7 +160,9 @@
                     <form id="algin-form" method="POST" action="{{ route('details_create_comment' , $books[0]['id']) }}">
                         @csrf
                         <div class="d-flex">
-                            <img src="{{ asset(session('user_details')->image) }}" alt="" class="rounded-circle" style="width: 40px; height: 40px;">
+                            <div style="width: 40px">
+                                <img src="{{ asset(session('user_details')->image) }}" class="pfp rounded-pill">
+                            </div>
                             <h3 class="mt-1 ml-2">{{ session('user_details')->username }}</h3>
                         </div>
                         <div class="form-group">

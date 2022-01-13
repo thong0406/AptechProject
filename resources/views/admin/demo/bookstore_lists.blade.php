@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @section('title')
-    Bookstore
+    Bookstore Moderate
 @endsection
 
 @section('content')
@@ -41,7 +41,7 @@
 											<td>{{$value['bookstore_name']}}</td>
 											<td>{{$value['created_at']->toDateString() }}</td>
 											<td>{{$value['updated_at']->toDateString() }}</td>
-											<td><a href="{{ /*Route('admin_user_edit', $value->id ))*/ "a" }}">Edit</a></td>
+											<td><a href="{{ Route('admin_bookstore_edit', $value->id ) }}">Edit</a></td>
 											<td><a href="{{ Route('admin_bookstore_delete', $value->id ) }}">Delete</a></td>
 										</tr>
 									@endif

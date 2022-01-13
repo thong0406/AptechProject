@@ -5,82 +5,76 @@
 @endsection
 
 @section('content')
-	<div class="container-fluid">
-
-        <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Books</h1>
-
-            <!-- DataTales Example -->
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <form action="{{ route('admin_book_update' , $book[0]['id']) }}" method="POST">
-                        @csrf
-                        {{ method_field('PUT') }}
-                        <div class="form-group">
-                            <label>Book name</label>
-                            <input class="form-control" name="book_name" placeholder="Please enter book's name" value="{{ $book[0]['book_name'] }}" />
-                        </div>
-                        <div class="form-group">
-                            <label>Author name</label>
-                            <input class="form-control" name="author" placeholder="Please enter book's name" value="{{ $book[0]['author'] }}" />
-                        </div>
-                        <div class="form-group">
-                            <label>Image</label>
-                            <input class="form-control" name="image" placeholder="Please enter book's name" value="{{ $book[0]['image'] }}" />
-                        </div>
-                        <div class="form-group">
-                            <label>Quantity</label>
-                            <input class="form-control" name="quantity" type="number" placeholder="Please enter book's name" value="{{ $book[0]['quantity'] }}" />
-                        </div>
-                        <div class="form-group">
-                            <label>Price</label>
-                            <input class="form-control" name="price" type="number" placeholder="Please enter book's name" value="{{ $book[0]['price'] }}" />
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea class="form-control" name="description" rows="3" placeholder="Please enter book description" value="{{ $book[0]['description'] }}"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Bookstore</label>
-                            <select class="form-select" name="bookstore_id" aria-label="Default select example">
-                                <option value="-1" selected></option>
-                                @foreach ($bookstores as $key => $value)
-                                    <option value=" {{ $value['id'] }} ">{{ $value['bookstore_name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                Tags
-                                <a href="#/" onclick="add_tag()"><i class="fas fa-plus"></i></a>
-                            </label>
-                            <h6 id="total">1/5</h6>
-                            <select class="form-select" name="tag_id[1]" aria-label="Default select example">
-                                <option value="-1" selected></option>
-                                @foreach ($tags as $key => $value)
-                                    <option value=" {{ $value['id'] }} ">{{ $value['tag_name'] }}</option>
-                                @endforeach
-                            </select>
-                            <div id="extra_tags">
-                                
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </form>
-                </div>
-            </div>
-
+<div class="container-fuild" style="padding-bottom: 50px; margin-top: 0px;">
             @if ($errors->any())
                 @foreach($errors->all() as $message) 
                    <div class="bg-danger rounded" style="padding: 5px; color: white; margin-bottom: 5px;">{{ $message }}</div>
                 @endforeach
             @endif
-
-        </div>
-        <!-- /.container-fluid -->
-
-            
-    <!-- End of Main Content -->
+    <div class="mt-5 px-5">
+        @foreach ($books as $key => $value)
+            <form method="POST" enctype="multitype/form-data" action="{{ route('admin_book_update' , $value['id']) }}">
+                @csrf
+                {{ method_field('PUT') }}
+                <div class="row pb-4">
+                    <div class="col-md-4" align="center">
+                        <label for="book_cover"><img src="{{ asset($value['image']) }}" style="width: 100%; height: auto; cursor: pointer;"></label>
+                        <!--
+                        <input type="file" name="image" id='book_cover' style="">
+                        <h6 class="text-secondary">Import cover image</h6>
+                        -->
+                    </div>
+                    <div class="col-md-8 col-xl-5">
+                        <label for="book_name">Book title :</label>
+                        <input type="text" name="book_name" id="book_name" value="{{ $value['book_name'] }}" class="form-control" placeholder="Book title">
+                        <label for="author">Author :</label>
+                        <input type="text" name="author" id="author" value="{{ $value['author'] }}" class="form-control" placeholder="Author">
+                        <label for="bookstore">Bookstore :</label>
+                        <select class="form-control" name="bookstore_id" id="bookstore">
+                            @foreach ($bookstores as $key => $bookstore)
+                                <option value="{{ $bookstore['id'] }}">{{ $bookstore['bookstore_name'] }}</option>
+                            @endforeach
+                        </select>
+                        <label for="description">Description :</label>
+                        <textarea class="form-control" name="description" id="description">{{ $value['description'] }}</textarea>
+                        <label for="extra_tags">Tags:<a href="#/" onclick="add_tag()"><i class="fas fa-plus"></i></a></label>
+                        <div id="extra_tags">
+                            <select class="form-control" name="tags[0]" id="tags">
+                                <option value="-1" selected></option>
+                                @foreach ($tags as $key => $tag)
+                                    <option value="{{ $tag['id'] }}">{{ $tag['tag_name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 col-xl-3 mt-md-2">
+                        <div class="p-3" style="border: 6px solid lightgray; border-radius: 10px;">
+                            <div style="width: 100%;" class="form-group row mx-0">
+                                <label for='price' class="col-sm-6 col-form-label">Price :</label>
+                                <div class="col-sm-6">
+                                    <input type="number" min='1' value="{{ $value['price'] }}" class="form-control" id="price" name="price">
+                                </div>
+                            </div>
+                            <div style="width: 100%;" class="form-group row pb-4 border-bottom mx-0">
+                                <label for="quantity" class="col-sm-6 col-form-label">In stock :</label>
+                                <div class="col-sm-6">
+                                    <input type="number" min='0' value="{{ $value['quantity'] }}" class="form-control" id="quantity" name="quantity">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="amount" class="mb-0">Amount</label>
+                                <input type="number" class="form-control mb-2" id="amount" disabled>
+                                <button class="btn rounded-pill btn-warning mb-2" type="button" style="width: 100%;" disabled>Add to cart</button>
+                                <button class="btn rounded-pill btn-warning" type="button" style="width: 100%;" disabled>Buy now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        @endforeach
+    </div>
+</div>
 @endsection
 
 @push ('scripts')
@@ -91,8 +85,8 @@
 
         function add_tag () {
             if (cur_tag < 5) {
+                tags.innerHTML += "<br><select class='form-control' name='tags[" + cur_tag + "]' id='tags'><option value='-1' selected></option>@foreach ($tags as $key => $value)<option value='{{ $value['id'] }}'>{{ $value['tag_name'] }}</option>@endforeach</select>";
                 cur_tag += 1;
-                tags.innerHTML += "<br><select class='form-select' name='tag_id[" + parseInt(cur_tag) + "]' aria-label='Default select example'><option value='-1' selected></option>@foreach ($tags as $key => $value)<option value=' {{ $value['id'] }} '>{{ $value['tag_name'] }}</option>@endforeach</select><br>";
                 total.innerHTML = parseInt(cur_tag) + "/5";
             }
         }

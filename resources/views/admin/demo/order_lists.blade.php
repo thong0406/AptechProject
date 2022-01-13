@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @section('title')
-    Bookstore
+    Orders Moderation
 @endsection
 
 @section('content')

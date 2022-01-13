@@ -13,17 +13,18 @@
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <form action="{{ route('admin_bookstore_store') }}" method="POST">
+                    <form action="{{ route('admin_bookstore_update' , $bookstore[0]['id']) }}" method="POST">
                         @csrf
+                        {{ method_field('PUT') }}
                         <div class="form-group">
-                            <label>Bookstore Name</label>
-                            <input class="form-control" name="name" placeholder="Please enter bookstore's name" />
+                            <label>Bookstore name</label>
+                            <input class="form-control" name="bookstore_name" placeholder="Please enter book's name" value="{{ $bookstore[0]['bookstore_name'] }}" />
                         </div>
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="Please enter book publisher description"></textarea>
+                            <textarea class="form-control" name="information" rows="3" placeholder="Please enter book description">{{ $bookstore[0]['information'] }}</textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>
             </div>
@@ -41,5 +42,7 @@
     <!-- End of Main Content -->
 @endsection
 
-
-    <!-- Custom fonts for this template-->
+@push ('scripts')
+    <script type="text/javascript">
+    </script>
+@endpush

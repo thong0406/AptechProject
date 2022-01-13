@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-	<div class="container-fluid">
+    <div class="container-fluid">
 
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">Tags</h1>
@@ -13,13 +13,14 @@
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <form action="{{ route('admin_tag_store') }}" method="POST">
+                    <form action="{{ route('admin_tag_update' , $tag[0]['id']) }}" method="POST">
                         @csrf
+                        {{ method_field('PUT') }}
                         <div class="form-group">
-                            <label>Tag Name</label>
-                            <input class="form-control" name="tag_name" placeholder="Please enter bookstore's name" />
+                            <label>Tag name</label>
+                            <input class="form-control" name="tag_name" placeholder="Please enter book's name" value="{{ $tag[0]['tag_name'] }}" />
                         </div>
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>
             </div>
@@ -37,5 +38,7 @@
     <!-- End of Main Content -->
 @endsection
 
-
-    <!-- Custom fonts for this template-->
+@push ('scripts')
+    <script type="text/javascript">
+    </script>
+@endpush

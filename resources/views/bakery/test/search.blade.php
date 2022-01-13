@@ -3,37 +3,49 @@
 @section('content')
 	<div class="container my-3">
 		<div class="row">
-			<div class="col-md-3 col-lg-3 col-xl-3 col-sm-12">
+			<div class="col-md-5 col-lg-4 col-xl-3 col-sm-12 border rounded p-3" style="height: max-content;">
 				<form method="POST" action="{{ route('search_store') }}">
 					@csrf
-					<div style="display: inline-flex; border-radius: 40px; background-color: none; padding: 2px; border: 1px solid lightgray; width: 100%;">
+					<div class="mb-3" style="display: inline-flex; border-radius: 40px; background-color: none; padding: 2px; border: 1px solid lightgray; width: 100%;">
 						<input 
 							value="{{ $param['search'] }}" 
 							type="text" name="search" style="outline: none; border: none; background-color: transparent; padding: 10px; height: 40px; width: 100%;">
 						<button name="submit" class="btn btn-warning" style="border-radius: 40px; height: 40px;">Search</button>
 					</div><br>
-					Search by :
-					<select name="type" aria-label="Default select example">
-						<option value="book_name" selected>Book name</option>
-						<option value="author">Author name</option>
-					</select><br>
-					Bookstores :
-					<select name="bookstore" aria-label="Default select example">
-						<option value="-1" selected></option>
-						@foreach ($bookstores as $key => $value)
-							<option value="{{ $value['id'] }}">{{ $value['bookstore_name'] }}</option>
-						@endforeach
-					</select><br>
-					Tags :
-					<select name="tags" aria-label="Default select example">
-						<option value="" selected></option>
-						@foreach ($tags as $key => $value)
-							<option value="{{ $value['id'] }}">{{ $value['tag_name'] }}</option>
-						@endforeach
-					</select><br>
+                    <div class="form-group row">
+                        <label for="type" class="col-sm-5 col-form-label">Search by</label>
+                        <div class="col-sm-7">
+                            <select name="type" id="type" aria-label="Default select example" class="form-control">
+								<option value="book_name" selected>Book name</option>
+								<option value="author">Author name</option>
+							</select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="bookstore" class="col-sm-5 col-form-label">Bookstore</label>
+                        <div class="col-sm-7">
+	                    	<select name="bookstore" id="bookstore" aria-label="Default select example" class="form-control">
+								<option value="-1" selected></option>
+								@foreach ($bookstores as $key => $value)
+									<option value="{{ $value['id'] }}">{{ $value['bookstore_name'] }}</option>
+								@endforeach
+							</select>
+						</div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="tags" class="col-sm-5 col-form-label">Tags</label>
+                        <div class="col-sm-7">
+	                        <select name="tags" id="tags" aria-label="Default select example" class="form-control">
+								<option value="" selected></option>
+								@foreach ($tags as $key => $value)
+									<option value="{{ $value['id'] }}">{{ $value['tag_name'] }}</option>
+								@endforeach
+							</select>
+						</div>
+                    </div>
 				</form>
 			</div>
-			<div class="col-md-9 col-lg-9 col-xl-9 col-sm-12">
+			<div class="col-md-7 col-lg-8 col-xl-9 col-sm-12">
 				<h1 style="width: 100%;" class="border-bottom">
 					@if ($param['search'] != '')
 						Results for "{{ $param['search'] }}"
@@ -41,7 +53,7 @@
 				</h1>
 				<div class="d-flex" style="flex-flow: row wrap;">
 					@foreach ($books as $key => $value)
-						<div class="single-book px-2" style="width: 30%;">
+						<div class="col-sm-4 col-md-6 col-lg-3 col-xl-4">
 							<a href="{{ route('book_details' , $value['id']) }}" class="single-book__img">
 								<img src="{{ asset($value['image']) }}" style="width: 100%;" alt="single book and cd">
 								<div class="single-book_download">

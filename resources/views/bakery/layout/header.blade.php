@@ -8,8 +8,8 @@
                 <div class="row">
                     <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                         <div class="row">
-                            <a style="padding-top:0px;" class="navbar-brand navBrandText text-uppercase font-weight-bold" href="index.html">
-                                <img src="/bakery/img/logo/cemrebakerylogo.png" alt="restorant" />
+                            <a style="padding-top:0px;" class="navbar-brand " href="{{ route('home') }}">
+                                <img style="height: 100%;" src="/bakery/img/logo/book_logo.png" alt="restorant" />
                             </a>
                         </div>
                     </div>
@@ -36,8 +36,14 @@
                                                 <img src="{{ asset(session('user_details')->image) }}" class="pfp rounded-pill">
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="my_account_btn" style="position: absolute;">
-                                                <a class="dropdown-item" href="{{ route('user_settings') }}">Acount setting</a>
-                                                <a class="dropdown-item" href="{{ route('cart') }}">Cart</a>
+                                                <a class="dropdown-item" href="{{ route('user_settings') }}">
+                                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                    Acount setting
+                                                </a>
+                                                <a class="dropdown-item" href="{{ route('cart') }}">
+                                                    <i class="fas fa-shopping-cart fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                    Cart
+                                                </a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item text-danger" href="{{ route('logout') }}">Log out</a>
                                             </div>

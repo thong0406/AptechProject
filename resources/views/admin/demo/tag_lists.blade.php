@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @section('title')
-    Bookstore
+    Tags Moderation
 @endsection
 
 @section('content')
@@ -40,7 +40,7 @@
 										<td>{{$value['tag_name']}}</td>
 										<td>{{$value['created_at']->toDateString() }}</td>
 										<td>{{$value['updated_at']->toDateString() }}</td>
-										<td><a href="{{ /*Route('admin_user_edit', $value->id ))*/ "a" }}">Edit</a></td>
+										<td><a href="{{ Route('admin_tag_edit', $value->id ) }}">Edit</a></td>
 										<td><a href="{{ Route('admin_tag_delete', $value->id ) }}">Delete</a></td>
 									</tr>
 								@endforeach

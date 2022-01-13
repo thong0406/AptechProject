@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @section('title')
-    Books
+    Moderate Books
 @endsection
 
 @section('content')
@@ -42,7 +42,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($books as $value)
+                                @foreach ($books as $key => $value)
 									<trs>
 										<th scope="row">{{$value['id']}}</th>
                                         <td><a href="{{ route('book_details' , $value['id']) }}"><img src="{{ asset($value['image']) }}" width="100"></a></td>
@@ -62,7 +62,7 @@
                                             <ul>
                                                 <li><a href="{{ Route('admin_book_edit', $value['id']) }}">Edit</a></li>
 								                <li><a href="{{ Route('admin_book_delete', $value['id']) }}">Delete</a></li>
-                                                <li><a href="{{ Route('admin_book_delete', $value['id']) }}">Comment</a></li>
+                                                <li><a href="{{ Route('admin_comment_lists' , ['book_id' => $value['id']]) }}">Comment</a></li>
                                             </ul>
                                         </td>
 									</tr>

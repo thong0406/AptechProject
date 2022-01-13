@@ -1,15 +1,15 @@
 @extends('admin.layout.master')
 
 @section('title')
-    Category
+    Create an Admin
 @endsection
 
 @section('content')
 	<div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Users</h1>
-
+        <h1 class="h3 mb-2 text-gray-800">Admin</h1>
+        <a href="{{ route('admin_admin_lists') }}">< Back</a>
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-body">
