@@ -17,90 +17,64 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item
-                @if(str_contains(url()->current(), 'users'))
-                    active
-                @endif">
-                <a class="nav-link collapsed" href="{{ route('admin_user_lists') }}">
-                    <i class="fas fa-fw fa-user"></i>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+                    aria-expanded="true" aria-controls="collapseUsers">
+                    <i class="fas fa-fw fa-folder"></i>
                     <span>Users</span>
                 </a>
+                <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin_user_lists') }}">List</a>
+                        <a class="collapse-item" href="{{ route('admin_user_add') }}">Add</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item
-                @if(str_contains(url()->current(), 'books/'))
-                    active
-                @endif">
-                <a class="nav-link collapsed" href="{{ route('admin_book_lists') }}">
-                    <i class="fas fa-fw fa-book"></i>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBooks"
+                    aria-expanded="true" aria-controls="collapseBooks">
+                    <i class="fas fa-fw fa-folder"></i>
                     <span>Books</span>
                 </a>
+                <div id="collapseBooks" class="collapse" aria-labelledby="headingBooks" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin_book_lists') }}">List</a>
+                        <a class="collapse-item" href="{{ route('admin_book_add') }}">Add</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item
-                @if(str_contains(url()->current(), 'bookstores'))
-                    active
-                @endif">
-                <a class="nav-link collapsed" href="{{ route('admin_bookstore_lists') }}">
-                    <i class="fas fa-fw fa-book-reader"></i>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBookstores"
+                    aria-expanded="true" aria-controls="collapseBookstores">
+                    <i class="fas fa-fw fa-folder"></i>
                     <span>Bookstores</span>
                 </a>
+                <div id="collapseBookstores" class="collapse" aria-labelledby="headingBookstores" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin_bookstore_lists') }}">List</a>
+                        <a class="collapse-item" href="{{ route('admin_bookstore_add') }}">Add</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item
-                @if(str_contains(url()->current(), 'tags'))
-                    active
-                @endif">
-                <a class="nav-link collapsed" href="{{ route('admin_tag_lists') }}">
-                    <i class="fas fa-fw fa-tag"></i>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTags"
+                    aria-expanded="true" aria-controls="collapseTags">
+                    <i class="fas fa-fw fa-folder"></i>
                     <span>Tags</span>
                 </a>
+                <div id="collapseTags" class="collapse" aria-labelledby="headingTags" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin_tag_lists') }}">List</a>
+                        <a class="collapse-item" href="{{ route('admin_tag_add') }}">Add</a>
+                    </div>
+                </div>
             </li>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item
-                @if(str_contains(url()->current(), 'orders'))
-                    active
-                @endif">
-                <a class="nav-link collapsed" href="{{ route('admin_order_lists') }}">
-                    <i class="fas fa-fw fa-shopping-cart"></i>
-                    <span>Orders</span>
-                </a>
-            </li>
-
-            @if (session('admin_details'))
-                    <!-- Nav Item - Pages Collapse Menu -->
-                @if (session('admin_details')->level == 1)
-                    <li class="nav-item
-                        @if (str_contains(url()->current(), 'admins'))
-                            active
-                        @endif">
-                        <a class="nav-link collapsed" href="{{ route('admin_admin_lists') }}">
-                            <i class="fas fa-fw fa-user-tie"></i>
-                            <span>Admin</span>
-                        </a>
-                    </li>
-                @else
-                        <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item">
-                        <a class="nav-link collapsed disabled">
-                            <i class="fas fa-fw fa-user-tie"></i>
-                            <span>Admin<br>- Requires level 1 moderation to access</span>
-                        </a>
-                    </li>
-                @endif
-            @else
-                    <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed disabled">
-                        <i class="fas fa-fw fa-user-tie"></i>
-                        <span>Admin<br>- Requires level 1 moderation to access</span>
-                    </a>
-                </li>
-            @endif
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

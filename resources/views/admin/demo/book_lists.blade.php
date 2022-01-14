@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @section('title')
-    Moderate Books
+    Books
 @endsection
 
 @section('content')
@@ -42,13 +42,13 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($books as $key => $value)
-									<trs>
+                                @foreach ($books as $value)
+									<tr >
 										<th scope="row">{{$value['id']}}</th>
-                                        <td><a href="{{ route('book_details' , $value['id']) }}"><img src="{{ asset($value['image']) }}" width="100"></a></td>
+                                        <td><img src="{{ asset($value['image']) }}" width="100"></td>
                                         <td>{{$value['book_name']}}</td>
 										<td>{{$value['bookstore_name']}}</td>
-                                        <td>
+                                        <td class="add">
                                             <ul>
                                                 @foreach ($book_tags[$value['id']] as $key => $tags)
                                                     <li>{{ $tags['tag_name'] }}</li>
@@ -58,11 +58,11 @@
                                         <td>{{$value['price']}}</td>
                                         <td>{{$value['quantity']}}</td>
 										<td>{{$value['created_at']->toDateString() }}</td>
-										<td>
-                                            <ul>
-                                                <li><a href="{{ Route('admin_book_edit', $value['id']) }}">Edit</a></li>
-								                <li><a href="{{ Route('admin_book_delete', $value['id']) }}">Delete</a></li>
-                                                <li><a href="{{ Route('admin_comment_lists' , ['book_id' => $value['id']]) }}">Comment</a></li>
+										<td class="add">
+                                            <ul style="list-style:none;">
+                                                <li ><button class="btn btn-success"><a href="{{ /*Route('admin_user_edit', $value->id ))*/ "a" }}"><i class="fas fa-user-edit"></i></a></button></li>
+								                <li><button class="btn btn-danger"><a href="{{ Route('admin_book_delete', $value['id'] ) }}"><i class="fas fa-user-times"></i></a></button></li>
+                                                <li><button class="btn btn-primary"><a href="{{ Route('admin_book_delete', $value['id'] ) }}"><i class="fas fa-comment"></i></a></button></li>
                                             </ul>
                                         </td>
 									</tr>

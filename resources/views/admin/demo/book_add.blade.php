@@ -13,7 +13,7 @@
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <form action="{{ route('admin_book_store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin_book_store') }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label>Book name</label>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group">
                             <label>Image</label>
-                            <input class="form-control-file" type="file" name="image"/>
+                            <input class="form-control" name="image" placeholder="Please enter book's name" />
                         </div>
                         <div class="form-group">
                             <label>Quantity</label>
@@ -62,6 +62,8 @@
                             </select>
                             <div id="extra_tags">
                                 
+
+
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Add</button>
