@@ -50,7 +50,7 @@
 											<td>
                                                 <ul>
                                                     <li><a href="{{ Route('admin_user_delete', $value['id'] ) }}"><button class="btn btn-danger">Delete</button></a></li>
-                                                    <li><a href="{{ Route('admin_order_lists', $value['id'] ) }}"><button class="btn-success">Orders</button></a></li>
+                                                    <li><a href="{{ Route('admin_order_lists', $value['id'] ) }}"><button class="btn btn-success">Orders</button></a></li>
                                                     <li><a href="{{ Route('admin_comment_lists' , ['user_id' => $value['id']]) }}"><button class="btn btn-primary">Comments</button></a></li>
                                                 </ul>
                                             </td>
