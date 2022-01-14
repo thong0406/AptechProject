@@ -8,24 +8,12 @@
         <div class="container">
             <div class="signup-content">
                 <div class="signup-form">
-                    <h2 class="form-title">Sign up</h2>
-                    <form method="POST" class="register-form" id="register-form" action="{{ route('create_user') }}">
+                    <h2 class="form-title">Admin sign up</h2>
+                    <form method="POST" class="register-form" id="register-form" action="{{ route('create_admin') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                             <input type="text" name="name" id="name" placeholder="Your Name" />
-                        </div>
-                        <div class="form-group">
-                            <label for="email"><i class="zmdi zmdi-email"></i></label>
-                            <input type="email" name="email" id="email" placeholder="Your Email" />
-                        </div>
-                        <div class="form-group">
-                            <label for="phone"><i class="zmdi zmdi-phone"></i></label>
-                            <input type="text" name="phone" id="phone" placeholder="Your Phonenumber" />
-                        </div>
-                        <div class="form-group">
-                            <label for="address"><i class="zmdi zmdi-home"></i></label>
-                            <input type="text" name="address" id="address" placeholder="Your Address" />
                         </div>
                         <div class="form-group">
                             <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>

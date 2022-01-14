@@ -16,13 +16,12 @@
             <div class="signin-content">
                 <div class="signin-image">
                     <figure><img src="/login/images/signin-image.jpg" alt="sing up image"></figure>
-                    <a href='{{ route('signup') }}' class="signup-image-link">Create an account</a>
                     <a href='{{ route('home') }}' class="signup-image-link">Home</a>
                 </div>
 
                 <div class="signin-form">
-                    <h2 class="form-title">Login</h2>
-                    <form method="POST" class="register-form" id="login-form" action="{{ route('auth_user') }}">
+                    <h2 class="form-title">Login to Admin Account</h2>
+                    <form method="POST" class="register-form" id="login-form" action="{{ route('auth_admin') }}">
                     	@csrf
                         <div class="form-group">
                             <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
