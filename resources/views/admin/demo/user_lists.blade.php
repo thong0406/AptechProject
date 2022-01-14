@@ -19,9 +19,10 @@
                                 <tr>
 									<th scope="col">Id</th>
 									<th scope="col">Name</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Phonenumber</th>
 									<th scope="col">Email</th>
 									<th scope="col">Created at</th>
-									<th scope="col">Last update</th>
 									<th colspan="2"></th>
 								</tr>
                             </thead>
@@ -29,31 +30,36 @@
                                 <tr>
                                     <th scope="col">Id</th>
 									<th scope="col">Name</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Phonenumber</th>
 									<th scope="col">Email</th>
 									<th scope="col">Created at</th>
-									<th scope="col">Last update</th>
 									<th colspan="2"></th>
                                 </tr>
                             </tfoot>
-                            <tbody>
+                            <tbody class="add">
                                 @foreach ($users as $value)
                                 	@if ($value['is_admin'] != '2')
 										<tr>
 											<th scope="row">{{$value['id']}}</th>
 											<td>{{$value['name']}}</td>
+                                            <td>{{$value['username']}}</td>
+                                            <td>{{$value['phone']}}</td>
 											<td>{{$value['email']}}</td>
 											<td>{{$value['created_at']->toDateString() }}</td>
-											<td>{{$value['updated_at']->toDateString() }}</td>
-											<td><a href="{{ /*Route('admin_user_edit', $value->id ))*/ "a" }}">Edit</a></td>
-											<td><a href="{{ Route('admin_user_delete', $value->id ) }}">Delete</a></td>
-                                            <td><a href="{{ Route('admin_user_delete', $value->id ) }}">Comments</a></td>
+											<td>
+                                                <ul>
+                                                    <li><a href="{{ Route('admin_user_delete', $value['id'] ) }}"><button class="btn btn-danger">Delete</button></a></li>
+                                                    <li><a href="{{ Route('admin_order_lists', $value['id'] ) }}"><button class="btn-success">Orders</button></a></li>
+                                                    <li><a href="{{ Route('admin_comment_lists' , ['user_id' => $value['id']]) }}"><button class="btn btn-primary">Comments</button></a></li>
+                                                </ul>
+                                            </td>
 										</tr>
 									@endif
 								@endforeach
                             </tbody>
                         </table>
                     </div>
-                    <a href='{{ Route('admin_user_add') }}' class="btn btn-primary">Add user</a>
                 </div>
             </div>
 

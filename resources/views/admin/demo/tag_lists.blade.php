@@ -1,14 +1,14 @@
 @extends('admin.layout.master')
 
 @section('title')
-    Bookstore
+    Tags Moderation
 @endsection
 
 @section('content')
 	<div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Tags</h1>
+        <h1 class="h3 mb-2 text-gray-800">Users</h1>
 
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
@@ -35,13 +35,13 @@
                             </tfoot>
                             <tbody>
                                 @foreach ($tags as $value)
-									<tr class="tag">
+									<tr class="add">
 										<th scope="row">{{$value['id']}}</th>
 										<td>{{$value['tag_name']}}</td>
 										<td>{{$value['created_at']->toDateString() }}</td>
 										<td>{{$value['updated_at']->toDateString() }}</td>
-										<td><button class="btn btn-success"><a href="{{ /*Route('admin_user_edit', $value->id ))*/ "a" }}"><i class="fas fa-user-edit"></i></a></button></td>
-										<td><button class="btn btn-danger"><a href="{{ Route('admin_tag_delete', $value->id ) }}"><i class="fas fa-user-times"></i></a></button></td>
+										<td><a href="{{ Route('admin_tag_edit', $value->id ) }}"><button class="btn btn-success">Edit</button></a></td>
+										<td><a href="{{ Route('admin_tag_delete', $value->id ) }}"><button class="btn btn-danger">Delete</button></a></td>
 									</tr>
 								@endforeach
                             </tbody>

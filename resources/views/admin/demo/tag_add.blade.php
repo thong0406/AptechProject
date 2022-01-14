@@ -9,7 +9,7 @@
 
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">Tags</h1>
-
+        <a href="{{ route('admin_tag_lists') }}">< Back</a>
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-body">

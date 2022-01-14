@@ -50,8 +50,8 @@
                                         <td>{{$value['level']}}</td>
 										<td>{{$value['created_at']->toDateString() }}</td>
 										<td>
-                                            <ul>
-                                                <li><a href="{{ Route('admin_admin_delete', $value['id'] ) }}">Delete</a></li>
+                                            <ul class="add">
+                                                <li><a href="{{ Route('admin_admin_delete', $value['id'] ) }}"><button class="btn btn-danger">Delete</button></a></li>
                                             </ul>
                                         </td>
 									</tr>
