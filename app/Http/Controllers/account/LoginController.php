@@ -11,12 +11,18 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function signin()
+    public function signin (Request $request)
     {
+        Auth::logout();
+        if ($request->session()->has('admin_details')) $request->session()->forget('admin_details');
+        if ($request->session()->has('user_details')) $request->session()->forget('user_details');
         return view('loginform.view.signin');
     }
     public function signup()
     {
+        Auth::logout();
+        if ($request->session()->has('admin_details')) $request->session()->forget('admin_details');
+        if ($request->session()->has('user_details')) $request->session()->forget('user_details');
         return view('loginform.view.signup');
     }
     public function auth_user (Request $request)
@@ -71,12 +77,18 @@ class LoginController extends Controller
 
 
         // Admin
-    public function admin_signin()
+    public function admin_signin(Request $request)
     {
+        Auth::logout();
+        if ($request->session()->has('admin_details')) $request->session()->forget('admin_details');
+        if ($request->session()->has('user_details')) $request->session()->forget('user_details');
         return view('loginform.view.admin_signin');
     }
-    public function admin_signup()
+    public function admin_signup(Request $request)
     {
+        Auth::logout();
+        if ($request->session()->has('admin_details')) $request->session()->forget('admin_details');
+        if ($request->session()->has('user_details')) $request->session()->forget('user_details');
         return view('loginform.view.admin_signup');
     }
     public function create_admin (Request $request)

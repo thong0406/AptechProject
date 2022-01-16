@@ -53,7 +53,6 @@ class admin_controller extends Controller
         $this->validate($request, [
             'name' => 'required',
             'username'=> 'required',
-            'password'=> 'required',
             'phonenumber' => 'required|max:10',
             'email' => 'required|unique:users|email'
         ] , 
@@ -64,7 +63,6 @@ class admin_controller extends Controller
         Admins::where('id' , '=' , $request->session()->get('admin_details')->id)->update([
             'name' => $request->name ,
             'username'=> $request->username ,
-            'password'=> bcrypt($request->password) ,
             'phonenumber' => $request->phonenumber ,
             'email' => $request->email
         ]);

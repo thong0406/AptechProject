@@ -5,6 +5,9 @@ namespace App\Http\Controllers\bakery;
 use App\Http\Controllers\Controller;
 use App\Models\Books;
 use App\Models\Comments;
+use App\Models\Orders;
+use App\Models\Order_details;
+use App\Models\Bookstores;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -88,5 +91,28 @@ class HomeController extends Controller
         $request->session()->put('user_details' , Auth::user());
 
         return redirect()->route('user_settings');
+    }
+
+    public function user_orders(Request $request){
+        $orders = Orders::where('user_id' , '=' , $request->session()->get('user_details')->id)->get();
+        return view('bakery.test.user_orders' , compact('orders'));
+    }
+    public function user_order_details(Request $request , $id){
+        $order = Orders::where('id' , '=' , $id)->get();
+        $order_details = Order_details::where('order_id' , '=' , $id)->get();
+        foreach ($order_details as $key => $value) {
+            $book = Books::where('id' , '=' , $value['book_id'])->get();
+            $bookstore = Bookstores::where('id' , '=' , $book[0]['bookstore_id'])->get();
+            $value['image'] = $book[0]['image'];
+            $value['book_name'] = $book[0]['book_name'];
+            $value['bookstore_name'] = $bookstore[0]['bookstore_name'];
+            $value['author'] = $book[0]['author'];
+            $value['price'] = $book[0]['price'];
+        }
+        return view('bakery.test.user_order_details' , compact('order' , 'order_details'));
+    }
+    public function user_order_delete(Request $request , $id){
+        $orders = Orders::where('user_id' , '=' , $id)->delete();
+        return redirect()->route('user_orders')->with('success' , 'Deleted successfully');
     }
 }
