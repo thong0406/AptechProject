@@ -122,7 +122,7 @@
 			<div align="center" style="height: 400px;">
 				<h1 style="padding: 20px; font-size: 60px;">Nothing in the cart</h1>
 				<a style="" href="{{ route('home') }}" align="center">Return to home</a><br>
-				<a style="" href="" align="center">Check orders</a>
+				<a style="" href="{{ route('user_orders') }}" align="center">Check orders</a>
 			</div>
 		@endif
 
