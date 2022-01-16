@@ -60,7 +60,22 @@
                                             <ul>
                                                 <li><a href="{{ Route('admin_order_confirm', $value->id ) }}">Confirm</a></li>
                                                 <li><a href="{{ Route('admin_order_disconfirm', $value->id ) }}">Disconfirm</a></li>
-                                                <li><a href="{{ Route('admin_order_delete', $value->id ) }}">Cancel</a></li>
+                                                <li><button class="btn btn-danger" type="button" data-toggle="modal" data-target="#delete{{ $value['id'] }}">Delete</button></li>
+                                                     <div class="modal" id="delete{{ $value['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Cancel order#{{$value['id']}}?</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="{{ Route('admin_order_delete', $value['id']) }}" class="btn btn-danger">Cancel</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 <li><a href="{{ Route('admin_order_details', $value->id ) }}">Details</a></li>
                                             </ul>
                                         </td>

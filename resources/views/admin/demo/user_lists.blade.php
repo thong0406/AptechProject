@@ -49,7 +49,22 @@
 											<td>{{$value['created_at']->toDateString() }}</td>
 											<td>
                                                 <ul>
-                                                    <li><a href="{{ Route('admin_user_delete', $value['id'] ) }}"><button class="btn btn-danger">Delete</button></a></li>
+                                                    <li><button class="btn btn-danger" type="button" data-toggle="modal" data-target="#delete{{ $value['id'] }}">Delete</button></li>
+                                                     <div class="modal" id="delete{{ $value['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Delete user#{{$value['id']}}?</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="{{ Route('admin_user_delete', $value['id']) }}" class="btn btn-danger">Delete</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <li><a href="{{ Route('admin_order_lists', $value['id'] ) }}"><button class="btn btn-success">Orders</button></a></li>
                                                     <li><a href="{{ Route('admin_comment_lists' , ['user_id' => $value['id']]) }}"><button class="btn btn-primary">Comments</button></a></li>
                                                 </ul>

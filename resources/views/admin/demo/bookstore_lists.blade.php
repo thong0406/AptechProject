@@ -42,7 +42,26 @@
 											<td>{{$value['created_at']->toDateString() }}</td>
 											<td>{{$value['updated_at']->toDateString() }}</td>
 											<td><a href="{{ Route('admin_bookstore_edit', $value->id ) }}"><button class="btn btn-success">Edit</button></a></td>
-											<td><a href="{{ Route('admin_bookstore_delete', $value->id ) }}"><button class="btn btn-danger">Delete</button></a></td>
+											<td>
+                                                <ul>
+                                                    <li><button class="btn btn-danger" type="button" data-toggle="modal" data-target="#delete{{ $value['id'] }}">Delete</button></li>
+                                                     <div class="modal" id="delete{{ $value['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Delete admin#{{$value['id']}}?</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="{{ Route('admin_bookstore_delete', $value['id']) }}" class="btn btn-danger">Delete</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ul>
+                                            </td>
 										</tr>
 									@endif
 								@endforeach
